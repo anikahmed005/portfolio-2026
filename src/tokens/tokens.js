@@ -5,16 +5,16 @@
 export const color = {
   // Base
   bg:        '#000613',
-  surface:   '#1C2642D5',
+  surface:   '#0D1220FB',
   surfaceAlt:'#0A112293',
 
   // Borders
-  border:    '#111827',
+  border:    '#1118273D',
   borderSub: '#0d1520',
 
   // Text
-  ink:       '#E2E1DE',
-  muted:     '#2A3552',
+  ink:       '#FFFFFF',
+  muted:     '#6F7997',
 
   // Brand — use sparingly
   brand:     '#ffcc24',

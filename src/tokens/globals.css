@@ -5,64 +5,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300;1,6..72,400&family=Geist+Mono:wght@300;400&display=swap');
 
-/* ── Token map → CSS custom properties ── */
-:root {
-  /* Color */
-  --color-bg:          #000613;
-  --color-surface:rgba(18, 25, 46, 0.51);
-  --color-surface-alt: #0a1122;
-  --color-border:      #111827;
-  --color-border-sub:  #0d1520;
-  --color-ink:         #E2E1DE;
-  --color-muted:       #2A3552;
-  --color-brand:       #ffcc24;
-
-  /* Project accents */
-  --accent-violet: #c084fc;
-  --accent-sky:    #38bdf8;
-  --accent-green:  #4ade80;
-  --accent-amber:  #fbbf24;
-  --accent-pink:   #f472b6;
-  --accent-teal:   #2dd4bf;
-  --accent-orange: #fb923c;
-
-  /* Typography */
-  --font-serif: 'Newsreader', Georgia, serif;
-  --font-mono:  'Geist Mono', 'Fira Mono', monospace;
-
-  --text-xs:   0.61rem;
-  --text-sm:   0.68rem;
-  --text-base: 0.82rem;
-  --text-md:   1rem;
-  --text-lg:   1.05rem;
-  --text-xl:   1.15rem;
-
-  /* Spacing */
-  --space-1:  0.25rem;
-  --space-2:  0.5rem;
-  --space-3:  0.75rem;
-  --space-4:  1rem;
-  --space-5:  1.25rem;
-  --space-6:  1.5rem;
-  --space-8:  2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-14: 3.5rem;
-  --space-20: 5rem;
-  --space-32: 8rem;
-
-  /* Radii */
-  --radius-sm:   4px;
-  --radius-md:   8px;
-  --radius-lg:   10px;
-  --radius-full: 9999px;
-
-  /* Transitions */
-  --transition-fast:   0.15s ease;
-  --transition-normal: 0.2s ease;
-  --transition-spring: 0.22s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 /* ── Reset ── */
 *, *::before, *::after {
   box-sizing: border-box;
