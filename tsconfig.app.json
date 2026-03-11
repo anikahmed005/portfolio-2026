@@ -26,8 +26,8 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@ds/*": ["../src/*"]
+      "@ds/*": ["src/*"]
     }
   },
-  "include": ["src", "../src"]
+  "include": ["src"]
 }
