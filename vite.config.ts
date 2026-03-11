@@ -10,7 +10,4 @@ export default defineConfig({
       '@ds': path.resolve(__dirname, '../src'),
     },
   },
-  server: {
-    historyApiFallback: true,
-  },
 })
