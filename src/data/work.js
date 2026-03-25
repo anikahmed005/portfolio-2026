@@ -11,7 +11,7 @@ export const WORK = [
     bg:       '#0d0520',
     accent:   color.accents.green,
     tags:     ['Mobile App', 'React Native', 'Fintech'],
-    banner: { image: '/BudgetBuddi/screens/dashboard.png' },
+    banner: { image: '/BudgetBuddi/screens/hero-image.png' },
     tldr:     'BudgetBuddi is a budgeting AI assisted platform that was built and shipped by me.',
     sections: [
       {
@@ -30,18 +30,20 @@ export const WORK = [
         },
       },
       {
-        heading: 'Approach',
+        heading: 'Process',
         paragraphs: [
-          'We started with a typographic audit and colour extraction from archival brand photography. From there we defined a core palette of four tones and a single variable typeface that handles both display and body copy.',
-          'Every component — from business cards to social templates — was designed as a Figma auto-layout frame that enforces spacing and colour constraints automatically.',
+          'A lot of my process starting from a point of view of what different potential users & customers would want. This included reading most recent reviews of competitors, understanding the architecture of how these budgeting apps work, push the boundary in order to find a differentiator to Budgetbuddi and ultimately, getting preliminary feedback from people about early prototypes.',
+          'In terms of building out a foundation, that required systemically building a foundation for a design system, reusable components, and then moving forward from there. (Too complex to put into text tbh)',
         ],
-        imagePlaceholder: 'Colour palette exploration',
+        imagePlaceholder: '/BudgetBuddi/screens/planning-ft.png',
       },
       {
         heading: 'Outcome',
         paragraphs: [
-          'The resulting system ships as a Figma library with 120+ components, a PDF brand guide, and an internal Notion wiki. Rollout took two weeks; the team reported a 60% reduction in ad-hoc design requests within the first month.',
+          'Currently BudgetBuddi is in closed testing to pass through the google play store & the IOS app store, though it has proven to be a a potentially successful product through preliminary testings',
+          'From testing 5 users, I had learned what they preferred from a manual input app, to wanting more organization for their bills/transactions, and most important of all, - with the AI features, users wanted indirect help in the form of tips, analyzing patterns, and mroe passive intergration of AI so it is not annoying.' 
         ],
+        imagePlaceholder: '/BudgetBuddi/screens/insights-ft.png',
       },
     ],
   },
