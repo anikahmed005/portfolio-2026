@@ -35,7 +35,7 @@ export const WORK = [
           'A lot of my process starting from a point of view of what different potential users & customers would want. This included reading most recent reviews of competitors, understanding the architecture of how these budgeting apps work, push the boundary in order to find a differentiator to Budgetbuddi and ultimately, getting preliminary feedback from people about early prototypes.',
           'In terms of building out a foundation, that required systemically building a foundation for a design system, reusable components, and then moving forward from there. (Too complex to put into text tbh)',
         ],
-        imagePlaceholder: '/BudgetBuddi/screens/planning-ft.png',
+        image: '/BudgetBuddi/screens/planning-ft.png',
       },
       {
         heading: 'Outcome',
@@ -43,7 +43,7 @@ export const WORK = [
           'Currently BudgetBuddi is in closed testing to pass through the google play store & the IOS app store, though it has proven to be a a potentially successful product through preliminary testings',
           'From testing 5 users, I had learned what they preferred from a manual input app, to wanting more organization for their bills/transactions, and most important of all, - with the AI features, users wanted indirect help in the form of tips, analyzing patterns, and mroe passive intergration of AI so it is not annoying.' 
         ],
-        imagePlaceholder: '/BudgetBuddi/screens/insights-ft.png',
+        image: '/BudgetBuddi/screens/organization-ft.png'
       },
     ],
   },
