@@ -14,7 +14,7 @@ export const color = {
 
   // Text
   ink:       '#FFFFFF',
-  muted:     '#6F7997',
+  muted:     '#8A96B9',
 
   // Brand — use sparingly
   brand:     '#ffcc24',
@@ -37,12 +37,12 @@ export const font = {
 };
 
 export const fontSize = {
-  xs:   '0.61rem',
-  sm:   '0.68rem',
-  base: '0.82rem',
-  md:   '1rem',
-  lg:   '1.05rem',
-  xl:   '1.15rem',
+  xs:   '0.90rem',
+  sm:   '0.90rem',
+  base: '1rem',
+  md:   '1.10rem',
+  lg:   '1.15rem',
+  xl:   '1.20rem',
 };
 
 export const fontWeight = {
@@ -108,6 +108,18 @@ export const layout = {
 export const zIndex = {
   base:    0,
   overlay: 100,
+};
+
+export const colorLight = {
+  bg:         '#F7F6F2',
+  surface:    '#EEECEAFC',
+  surfaceAlt: '#E5E3DE93',
+  border:     '#C8C6C03D',
+  borderSub:  '#C8C6C0',
+  ink:        '#111010',
+  muted:      '#6B6860',
+  brand:      '#ffcc24',
+  accents:    color.accents,
 };
 
 // Convenience export — all tokens as one object

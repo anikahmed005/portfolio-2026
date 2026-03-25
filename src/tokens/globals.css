@@ -51,3 +51,36 @@ button {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── Theme switch: smooth color crossfade + staggered card tilt ── */
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition:
+    background-color 0.55s ease,
+    color            0.45s ease,
+    border-color     0.45s ease,
+    box-shadow       0.45s ease !important;
+}
+
+.theme-transition header,
+.theme-transition section,
+.theme-transition nav,
+.theme-transition li {
+  animation: card-tilt 0.5s ease forwards;
+}
+
+.theme-transition header             { animation-delay:   0ms; }
+.theme-transition nav                { animation-delay:  30ms; }
+.theme-transition li:nth-child(1)    { animation-delay:  50ms; }
+.theme-transition li:nth-child(2)    { animation-delay:  90ms; }
+.theme-transition li:nth-child(3)    { animation-delay: 130ms; }
+.theme-transition li:nth-child(4)    { animation-delay: 170ms; }
+.theme-transition li:nth-child(5)    { animation-delay: 210ms; }
+.theme-transition li:nth-child(6)    { animation-delay: 250ms; }
+
+@keyframes card-tilt {
+  0%   { transform: perspective(700px) rotateX(0deg);   opacity: 1;    }
+  35%  { transform: perspective(700px) rotateX(-4deg);  opacity: 0.82; }
+  100% { transform: perspective(700px) rotateX(0deg);   opacity: 1;    }
+}

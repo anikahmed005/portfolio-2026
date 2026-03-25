@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
-import Tag     from '../Tag/Tag';
-import NavLink from '../NavLink/NavLink';
+import Tag       from '../Tag/Tag';
+import { useTheme } from '../../context/ThemeContext';
 
 const s = {
   banner: {
@@ -115,36 +115,18 @@ const s = {
     gap:      'var(--space-2)',
   },
 
-  /* ── Back nav overlay ── */
-  backNav: {
-    position:     'fixed',
-    top:          'var(--space-6)',
-    left:         'var(--space-6)',
-    zIndex:       100,
-    background:   'color-mix(in srgb, var(--color-bg) 80%, transparent)',
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)',
-    borderRadius: 'var(--radius-full)',
-    padding:      'var(--space-2) var(--space-4)',
-    border:       '1px solid var(--color-border)',
-  },
 };
 
-export default function ProjectBanner({ project, onBack }) {
+export default function ProjectBanner({ project }) {
+  const { theme } = useTheme();
   const banner = project.banner ?? {};
 
-  return (
-    <div style={{ ...s.banner, background: project.bg, borderTop: `15px solid ${project.accent}` }}>
+  const bannerBg = theme === 'light'
+    ? `color-mix(in srgb, ${project.accent} 12%, #EAE7E1)`
+    : project.bg;
 
-      {/* ── Back navigation ── */}
-      <nav style={s.backNav} aria-label="Breadcrumb">
-        <NavLink
-          href="/"
-          onClick={onBack ? (e) => { e.preventDefault(); onBack(); } : undefined}
-        >
-          ← Work
-        </NavLink>
-      </nav>
+  return (
+    <div style={{ ...s.banner, background: bannerBg, borderTop: `15px solid ${project.accent}` }}>
 
       {/* ── Left: media ── */}
       <div style={s.leftPanel}>

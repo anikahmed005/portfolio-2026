@@ -7,6 +7,7 @@ import Footer          from '../components/Footer/Footer';
 import PageTransition  from '../components/PageTransition/PageTransition';
 import { color }       from '../tokens/tokens';
 import { WORK }        from '../data/work';
+import ThemeToggle     from '../components/ThemeToggle/ThemeToggle';
 
 // ─── Layout styles ─────────────────────────────────────────────────────────
 const styles = {
@@ -43,9 +44,10 @@ const styles = {
     transition:             'color 0.2s, text-decoration-color 0.2s',
   },
   nav: {
-    marginTop:  'var(--space-5)',
-    display:    'flex',
-    gap:        'var(--space-5)',
+    marginTop:   'var(--space-5)',
+    display:     'flex',
+    alignItems:  'center',
+    gap:         'var(--space-5)',
   },
   workList: {
     listStyle: 'none',
@@ -107,6 +109,7 @@ export default function HomePage({ onItemClick }) {
             <NavLink href="/about">About</NavLink>
             <NavLink href="/connect">Connect</NavLink>
             <NavLink href="/writing">Writing</NavLink>
+            <ThemeToggle />
           </nav>
         </header>
         </PageTransition>

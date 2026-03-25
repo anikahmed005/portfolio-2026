@@ -1,41 +1,43 @@
-import { color, font, fontSize, space, radii, transition } from './tokens'
+import { color, colorLight, font, fontSize, space, radii, transition } from './tokens'
 
-const r = document.documentElement
+export function applyTheme(theme: 'dark' | 'light') {
+  const c = theme === 'light' ? colorLight : color
+  const r = document.documentElement
 
-// Color
-r.style.setProperty('--color-bg',          color.bg)
-r.style.setProperty('--color-surface',     color.surface)
-r.style.setProperty('--color-surface-alt', color.surfaceAlt)
-r.style.setProperty('--color-border',      color.border)
-r.style.setProperty('--color-border-sub',  color.borderSub)
-r.style.setProperty('--color-ink',         color.ink)
-r.style.setProperty('--color-muted',       color.muted)
-r.style.setProperty('--color-brand',       color.brand)
+  // Color
+  r.style.setProperty('--color-bg',          c.bg)
+  r.style.setProperty('--color-surface',     c.surface)
+  r.style.setProperty('--color-surface-alt', c.surfaceAlt)
+  r.style.setProperty('--color-border',      c.border)
+  r.style.setProperty('--color-border-sub',  c.borderSub)
+  r.style.setProperty('--color-ink',         c.ink)
+  r.style.setProperty('--color-muted',       c.muted)
+  r.style.setProperty('--color-brand',       c.brand)
 
-// Accents
-Object.entries(color.accents).forEach(([name, value]) => {
-  r.style.setProperty(`--accent-${name}`, value)
-})
+  // Accents
+  Object.entries(c.accents).forEach(([name, value]) => {
+    r.style.setProperty(`--accent-${name}`, value as string)
+  })
 
-// Typography
-r.style.setProperty('--font-serif', font.serif)
-r.style.setProperty('--font-mono',  font.mono)
+  // Typography
+  r.style.setProperty('--font-serif', font.serif)
+  r.style.setProperty('--font-mono',  font.mono)
+  Object.entries(fontSize).forEach(([n, v]) => r.style.setProperty(`--text-${n}`, v))
 
-Object.entries(fontSize).forEach(([name, value]) => {
-  r.style.setProperty(`--text-${name}`, value)
-})
+  // Spacing
+  Object.entries(space).forEach(([n, v]) => {
+    if (n !== '0') r.style.setProperty(`--space-${n}`, v)
+  })
 
-// Spacing
-Object.entries(space).forEach(([name, value]) => {
-  if (name !== '0') r.style.setProperty(`--space-${name}`, value)
-})
+  // Radii
+  Object.entries(radii).forEach(([n, v]) => r.style.setProperty(`--radius-${n}`, v))
 
-// Radii
-Object.entries(radii).forEach(([name, value]) => {
-  r.style.setProperty(`--radius-${name}`, value)
-})
+  // Transitions
+  r.style.setProperty('--transition-fast',   transition.fast)
+  r.style.setProperty('--transition-normal', transition.normal)
+  r.style.setProperty('--transition-spring', transition.spring)
+}
 
-// Transitions
-r.style.setProperty('--transition-fast',   transition.fast)
-r.style.setProperty('--transition-normal', transition.normal)
-r.style.setProperty('--transition-spring', transition.spring)
+// Initial load — check localStorage for persisted preference
+const saved = localStorage.getItem('theme') as 'dark' | 'light' | null
+applyTheme(saved ?? 'dark')

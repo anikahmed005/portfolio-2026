@@ -1,19 +1,30 @@
-import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import HomePage    from '@ds/screens/HomePage'
 import ProjectPage from '@ds/screens/ProjectPage'
+import DotGrid     from '@ds/components/DotGrid/DotGrid'
 import { WORK }    from '@ds/data/work'
+
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])
+  return null
+}
 
 function AppRoutes() {
   const navigate = useNavigate()
 
   return (
-    <Routes>
-      <Route
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route
         path="/"
         element={<HomePage onItemClick={(href: string) => navigate(href)} />}
       />
-      <Route path="/work/:slug" element={<ProjectDetail />} />
-    </Routes>
+        <Route path="/work/:slug" element={<ProjectDetail />} />
+      </Routes>
+    </>
   )
 }
 
@@ -50,6 +61,7 @@ function ProjectDetail() {
 export default function App() {
   return (
     <BrowserRouter>
+      <DotGrid />
       <AppRoutes />
     </BrowserRouter>
   )

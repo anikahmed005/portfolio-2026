@@ -30,6 +30,32 @@ export const WORK = [
         },
       },
       {
+        heading: 'Features',
+        featureCards: [
+          {
+            icon: 'microphone',
+            title: 'Voice Commands',
+            body: 'Quickly log transactions hands-free. Just say what you spent and BudgetBuddi captures it without breaking your flow.',
+            video: '/BudgetBuddi/videos/bb-voice-cmd.mp4',
+            frame: '/BudgetBuddi/pixel-frame.png',
+          },
+          {
+            icon: 'folder-open',
+            title: 'Smart Folders',
+            body: 'Group bills and recurring expenses into folders that map to how you actually think about money — not how a spreadsheet does.',
+            video: '/BudgetBuddi/videos/folders-vid.mp4',
+            frame: '/BudgetBuddi/pixel-frame.png',
+          },
+          {
+            icon: 'chart-line-variant',
+            title: 'AI Insights',
+            body: 'Passive pattern analysis surfaces spending trends without getting in your way. Tips appear when relevant, not on demand.',
+            video: '/BudgetBuddi/videos/insights-ft-vid.mp4',
+            frame: '/BudgetBuddi/pixel-frame.png',
+          },
+        ],
+      },
+      {
         heading: 'Process',
         paragraphs: [
           'A lot of my process starting from a point of view of what different potential users & customers would want. This included reading most recent reviews of competitors, understanding the architecture of how these budgeting apps work, push the boundary in order to find a differentiator to Budgetbuddi and ultimately, getting preliminary feedback from people about early prototypes.',
