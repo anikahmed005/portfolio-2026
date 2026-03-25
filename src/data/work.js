@@ -11,7 +11,7 @@ export const WORK = [
     bg:       '#0d0520',
     accent:   color.accents.green,
     tags:     ['Mobile App', 'React Native', 'Fintech'],
-    banner: { image: '/BudgetBuddi/screens/foresight.png' },
+    banner: { image: '/BudgetBuddi/screens/dashboard.png' },
     tldr:     'BudgetBuddi is a budgeting AI assisted platform that was built and shipped by me.',
     sections: [
       {
