@@ -117,10 +117,16 @@ const s = {
 
   /* ── Back nav overlay ── */
   backNav: {
-    position: 'absolute',
-    top:      'var(--space-6)',
-    left:     'var(--space-6)',
-    zIndex:   10,
+    position:     'fixed',
+    top:          'var(--space-6)',
+    left:         'var(--space-6)',
+    zIndex:       100,
+    background:   'color-mix(in srgb, var(--color-bg) 80%, transparent)',
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    borderRadius: 'var(--radius-full)',
+    padding:      'var(--space-2) var(--space-4)',
+    border:       '1px solid var(--color-border)',
   },
 };
 
