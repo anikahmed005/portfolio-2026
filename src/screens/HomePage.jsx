@@ -63,10 +63,11 @@ export default function HomePage({ onItemClick }) {
     accent:  color.accents.violet,
     bg:      '#070d1a',
     image:   null,
+    phones:  null,
   });
 
-  function handleEnter({ title, year, accent, bg, image }) {
-    setPreview({ visible: true, title, year, accent, bg, image });
+  function handleEnter({ title, year, accent, bg, image, phones }) {
+    setPreview({ visible: true, title, year, accent, bg, image, phones });
   }
 
   function handleLeave() {
@@ -83,6 +84,7 @@ export default function HomePage({ onItemClick }) {
         accent={preview.accent}
         bg={preview.bg}
         image={preview.image}
+        phones={preview.phones}
       />
 
       <div style={styles.page}>
@@ -121,6 +123,7 @@ export default function HomePage({ onItemClick }) {
               accent={item.accent}
               bg={item.bg}
               image={item.sections?.find(s => s.image)?.image}
+              phones={item.sections?.find(s => s.videoGrid)?.videoGrid}
               isFirst={i === 0}
               onMouseEnter={handleEnter}
               onMouseLeave={handleLeave}

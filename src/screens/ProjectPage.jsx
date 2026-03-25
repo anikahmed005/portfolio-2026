@@ -1,58 +1,20 @@
 // @ts-nocheck
 import React from 'react';
-import Tag            from '../components/Tag/Tag';
-import TLDRBox        from '../components/TLDRBox/TLDRBox';
+import ProjectBanner  from '../components/ProjectBanner/ProjectBanner';
 import CTAButton      from '../components/CTAButton/CTAButton';
 import Footer         from '../components/Footer/Footer';
-import NavLink        from '../components/NavLink/NavLink';
 import PageTransition from '../components/PageTransition/PageTransition';
 
 const styles = {
   page: {
-    maxWidth: '560px',
+    maxWidth: '850px',
     margin:   '0 auto',
-    padding:  'var(--space-20) var(--space-6) var(--space-32)',
+    padding:  'var(--space-10) var(--space-6) 0',
   },
-  back: {
-    marginBottom: 'var(--space-8)',
-  },
-  hero: {
-    marginBottom: 'var(--space-8)',
-  },
-  h1: {
-    fontFamily:    'var(--font-serif)',
-    fontSize:      'var(--text-xl)',
-    fontWeight:    500,
-    letterSpacing: '-0.01em',
-    lineHeight:    1.3,
-    color:         'var(--color-ink)',
-    margin:        0,
-    marginBottom:  'var(--space-3)',
-  },
-  meta: {
-    display:      'flex',
-    alignItems:   'center',
-    gap:          'var(--space-3)',
-    marginBottom: 'var(--space-4)',
-  },
-  metaText: {
-    fontFamily:    'var(--font-mono)',
-    fontSize:      'var(--text-sm)',
-    fontWeight:    300,
-    color:         'var(--color-muted)',
-    letterSpacing: '0.02em',
-  },
-  metaDot: {
-    width:        '3px',
-    height:       '3px',
-    borderRadius: '50%',
-    background:   'var(--color-muted)',
-    flexShrink:   0,
-  },
-  tags: {
-    display:  'flex',
-    flexWrap: 'wrap',
-    gap:      'var(--space-2)',
+  content: {
+    maxWidth: '600px',
+    margin:   '0 auto',
+    padding:  'var(--space-10) var(--space-6) var(--space-32)',
   },
   section: {
     marginBottom: 'var(--space-10)',
@@ -73,6 +35,48 @@ const styles = {
     lineHeight:   1.65,
     color:        'var(--color-ink)',
     marginBottom: 'var(--space-3)',
+  },
+  videoGrid: {
+    display:         'flex',
+    justifyContent:  'center',
+    gap:             'var(--space-4)',
+    marginTop:       'var(--space-8)',
+    marginBottom:    'var(--space-5)',
+    flexWrap:        'wrap',
+  },
+  videoCell: {
+    position:  'relative',
+    flex:      '1 1 0',
+    minWidth:  '80px',
+  },
+  phoneScreen: {
+    position:     'absolute',
+    top:          '2%',
+    left:         '3.5%',
+    width:        '93%',
+    height:       '94%',
+    zIndex:       3,
+    overflow:     'hidden',
+    borderRadius: '10% / 4%',
+    background:   '#0C0C0B',
+  },
+  videoEl: {
+    position:  'absolute',
+    top:       0,
+    left:      0,
+    width:     '100%',
+    height:    '100%',
+    objectFit: 'cover',
+    display:   'block',
+    zIndex:    1,
+  },
+  videoFrameImg: {
+    position:      'relative',
+    width:         '100%',
+    display:       'block',
+    zIndex:        2,
+    pointerEvents: 'none',
+    userSelect:    'none',
   },
   imagePlaceholder: {
     width:          '100%',
@@ -111,56 +115,47 @@ export default function ProjectPage({ project, onBack }) {
   const sectionCount = project.sections?.length ?? 0;
 
   return (
-    <div style={styles.page}>
-
-      {/* ── Back navigation ── */}
-      <PageTransition delay={0}>
-      <nav style={styles.back} aria-label="Breadcrumb">
-        <NavLink
-          href="/"
-          onClick={onBack ? (e) => { e.preventDefault(); onBack(); } : undefined}
-        >
-          ← Work
-        </NavLink>
-      </nav>
-      </PageTransition>
-
-      {/* ── Hero ── */}
-      <PageTransition delay={80}>
-      <header style={styles.hero}>
-        <h1 style={styles.h1}>{project.title}</h1>
-
-        <div style={styles.meta}>
-          <span style={styles.metaText}>{project.year}</span>
-          <span style={styles.metaDot} aria-hidden="true" />
-          <span style={styles.metaText}>{project.category}</span>
-        </div>
-
-        {project.tags?.length > 0 && (
-          <div style={styles.tags}>
-            {project.tags.map(tag => (
-              <Tag key={tag} label={tag} />
-            ))}
-          </div>
-        )}
-      </header>
-      </PageTransition>
-
-      {/* ── TLDR box ── */}
-      {project.tldr && (
-        <PageTransition delay={160}>
-          <TLDRBox summary={project.tldr} accent={project.accent} />
-        </PageTransition>
-      )}
+    <>
+      {/* ── Banner ── */}
+      <div style={styles.page}>
+        <ProjectBanner project={project} onBack={onBack} />
+      </div>
 
       {/* ── Content sections ── */}
-      <main>
+      <div style={styles.content}>
+        <main>
         {project.sections?.map((section, i) => (
           <PageTransition key={i} delay={(i + 3) * 80}>
           <section style={styles.section}>
             <h2 style={styles.sectionHeading}>{section.heading}</h2>
             {section.paragraphs?.map((p, j) => (
-              <p key={j} style={styles.paragraph}>{p}</p>
+              <React.Fragment key={j}>
+                <p style={styles.paragraph}>{p}</p>
+                {j === 0 && section.videoGrid && (
+                  <div style={styles.videoGrid}>
+                    {section.videoGrid.videos.map((src, k) => (
+                      <div key={k} style={styles.videoCell}>
+                        <div style={styles.phoneScreen}>
+                          <video
+                            src={src}
+                            style={styles.videoEl}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                          />
+                        </div>
+                        <img
+                          src={section.videoGrid.frame}
+                          alt=""
+                          aria-hidden="true"
+                          style={styles.videoFrameImg}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </React.Fragment>
             ))}
             {section.image ? (
               <img
@@ -198,12 +193,13 @@ export default function ProjectPage({ project, onBack }) {
           </section>
           </PageTransition>
         ))}
-      </main>
+        </main>
 
-      {/* ── Footer ── */}
-      <PageTransition delay={(sectionCount + 3) * 80}>
-        <Footer name="Anik Ahmed" />
-      </PageTransition>
-    </div>
+        {/* ── Footer ── */}
+        <PageTransition delay={(sectionCount + 3) * 80}>
+          <Footer name="Anik Ahmed" />
+        </PageTransition>
+      </div>
+    </>
   );
 }

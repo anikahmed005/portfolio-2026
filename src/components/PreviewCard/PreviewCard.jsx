@@ -98,6 +98,7 @@ export default function PreviewCard({
   accent = '#ffcc24',
   bg = '#070d1a',
   image = null,
+  phones = null,
 }) {
   const cardRef = useRef(null);
   const rafRef  = useRef(null);
@@ -145,7 +146,18 @@ export default function PreviewCard({
 
   return (
     <div ref={cardRef} style={cardStyle} aria-hidden="true">
-      {image ? (
+      {phones ? (
+        <div style={{ ...styles.thumb, display: 'flex', alignItems: 'flex-start', gap: '6px', padding: '10px 10px 0', background: bg || '#070d1a', overflow: 'hidden' }}>
+          {phones.videos.map((src, k) => (
+            <div key={k} style={{ position: 'relative', flex: '1 1 0' }}>
+              <div style={{ position: 'absolute', top: '2%', left: '3.5%', width: '93%', height: '94%', zIndex: 3, overflow: 'hidden', borderRadius: '10% / 4%', background: '#0C0C0B' }}>
+                <video src={src} autoPlay loop muted playsInline style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              </div>
+              <img src={phones.frame} alt="" style={{ position: 'relative', width: '100%', display: 'block', zIndex: 2, pointerEvents: 'none' }} />
+            </div>
+          ))}
+        </div>
+      ) : image ? (
         <img src={image} alt={title} style={{ ...styles.thumb, objectFit: 'cover' }} />
       ) : (
         <div

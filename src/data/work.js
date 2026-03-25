@@ -11,15 +11,23 @@ export const WORK = [
     bg:       '#0d0520',
     accent:   color.accents.green,
     tags:     ['Mobile App', 'React Native', 'Fintech'],
+    banner: { image: '/BudgetBuddi/screens/foresight.png' },
     tldr:     'BudgetBuddi is a budgeting AI assisted platform that was built and shipped by me.',
     sections: [
       {
         heading: 'Problem',
         paragraphs: [
           'People always try to create a budget for themselves but like a new years gym membership - theyre usually abandoned early on.',
-          'My goal was to create a budgeting mobile app that would help people have a budget that fit their goals while being lower cost.',
+          'My goal was to create a budgeting mobile app that would help people have a budget that fit their goals, maintain functionality, while being lower cost than traditional budgeting apps like YNAB or Monarch.',
         ],
-        imagePlaceholder: 'Before / after logo audit',
+        videoGrid: {
+          frame:  '/BudgetBuddi/pixel-frame.png',
+          videos: [
+            '/BudgetBuddi/videos/bb-voice-cmd.mp4',
+            '/BudgetBuddi/videos/folders-vid.mp4',
+            '/BudgetBuddi/videos/insights-ft-vid.mp4',
+          ],
+        },
       },
       {
         heading: 'Approach',
@@ -47,6 +55,7 @@ export const WORK = [
     bg:       '#001525',
     accent:   color.accents.green,
     tags:     ['tablet', 'product', 'automotive'],
+    banner:   { image: '/AutoVision-e/Hero-Image.png' },
     tldr:     'An Autotmotive B2B software for used car dealerships to enable sales to assist clients',
     sections: [
       {
@@ -83,6 +92,7 @@ export const WORK = [
     bg:       '#051a05',
     accent:   color.accents.amber,
     tags:     ['Freelance', 'UX Design', 'UX Writing', 'Web'],
+    banner:   { image: '/Taino-World/Landing-Page-Hero.jpg' },
     tldr:     'A educational conference web experience built to educate scholars & academics about an indigenous population.',
     sections: [
       {
@@ -122,6 +132,7 @@ export const WORK = [
     bg:       '#1a1200',
     accent:   color.accents.green,
     tags:     ['Mobile', 'UX research', 'UI Design'],
+    banner:   { image: '/AutoVision-s/group-shot-1.png' },
     tldr:     'As Product Designer and UX Researcher, I worked on AutoVision Mobile, a startup concept aimed at helping used car salespeople manage inventory more efficiently.',
     sections: [
       {
@@ -164,6 +175,7 @@ export const WORK = [
     bg:       '#1a0010',
     accent:   color.accents.pink,
     tags:     ['UI Design', 'Web', 'Challenge'],
+    banner:   { image: '/SCORM/tab-switching.gif' },
     tldr:     'Building out a sales funnel as part of a design challenge',
     sections: [
       {
@@ -204,6 +216,7 @@ export const WORK = [
     bg:       '#001518',
     accent:   color.accents.teal,
     tags:     ['Interaction Design', 'UI Design',],
+    banner:   { image: '/UI- Explorations/dynamic-clipboard.gif' },
     tldr:     'Just some different UI explorations/past projects Ive worked on that did not have a individual page.',
     sections: [
       {

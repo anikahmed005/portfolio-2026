@@ -75,6 +75,7 @@ export default function WorkItem({
   accent,
   bg,
   image,
+  phones,
   isFirst = false,
   onMouseEnter,
   onMouseLeave,
@@ -85,7 +86,7 @@ export default function WorkItem({
 
   function handleEnter(e) {
     setOver(true);
-    onMouseEnter?.({ title, year, accent, bg, image, event: e });
+    onMouseEnter?.({ title, year, accent, bg, image, phones, event: e });
   }
 
   function handleLeave(e) {
