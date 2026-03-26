@@ -119,7 +119,7 @@ export default function HomePage({ onItemClick }) {
 
             {/* Glassmorphic contact icons */}
             <a
-              href="https://www.linkedin.com/in/anikahmed005/"
+              href="https://www.linkedin.com/in/anikahmed1995/"
               target="_blank"
               rel="noopener noreferrer"
               title="LinkedIn"

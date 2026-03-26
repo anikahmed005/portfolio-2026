@@ -110,7 +110,7 @@ export default function AboutPage({ onBack }) {
             {/* Contact chips */}
             <div style={{ display: 'flex', gap: 'var(--space-3)', marginTop: 'var(--space-8)', flexWrap: 'wrap' }}>
               <a
-                href="https://www.linkedin.com/in/anikahmed005/"
+                href="https://www.linkedin.com/in/anikahmed1995/"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="LinkedIn"
