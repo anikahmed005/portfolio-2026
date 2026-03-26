@@ -119,7 +119,7 @@ export default function HomePage({ onItemClick }) {
 
             {/* Glassmorphic contact icons */}
             <a
-              href="https://www.linkedin.com/in/anikahmeddesign/"
+              href="https://www.linkedin.com/in/anikahmed005/"
               target="_blank"
               rel="noopener noreferrer"
               title="LinkedIn"
@@ -142,7 +142,7 @@ export default function HomePage({ onItemClick }) {
               <MdiIcon path={mdiLinkedin} size={0.75} color="var(--color-muted)" />
             </a>
             <a
-              href="mailto:anikahmeddesign@gmail.com"
+              href="mailto:anikahmedux@gmail.com"
               title="Email"
               style={{
                 display:             'inline-flex',
