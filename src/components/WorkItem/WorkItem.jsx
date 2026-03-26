@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTheme } from '../../context/ThemeContext';
 
 const styles = {
   item: {
@@ -31,9 +32,7 @@ const styles = {
     lineHeight: 1.35,
     transition: 'color var(--transition-normal)',
   },
-  titleHover: {
-    color: 'var(--color-brand)',
-  },
+  titleHover: {},
   category: {
     fontSize: 'var(--text-base)',
     color: 'var(--color-muted)',
@@ -83,6 +82,11 @@ export default function WorkItem({
   style,
 }) {
   const [over, setOver] = useState(false);
+  const { theme } = useTheme();
+
+  const titleGradient = theme === 'dark'
+    ? 'linear-gradient(155deg, var(--color-brand) 0%,rgb(139, 146, 250) 100%)'
+    : 'linear-gradient(155deg, var(--color-brand) 0%,rgb(45, 5, 104) 100%)';
 
   function handleEnter(e) {
     setOver(true);
@@ -102,7 +106,12 @@ export default function WorkItem({
 
   const titleStyle = {
     ...styles.title,
-    ...(over ? styles.titleHover : {}),
+    ...(over ? {
+      background:           titleGradient,
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor:  'transparent',
+      backgroundClip:       'text',
+    } : {}),
   };
 
   return (

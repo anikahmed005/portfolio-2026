@@ -17,7 +17,7 @@ export const color = {
   muted:     '#8A96B9',
 
   // Brand — use sparingly
-  brand:     '#ffcc24',
+  brand:     '#F8C623',
 
   // Project accent palette (one per project)
   accents: {
@@ -111,14 +111,14 @@ export const zIndex = {
 };
 
 export const colorLight = {
-  bg:         '#F7F6F2',
-  surface:    '#EEECEAFC',
-  surfaceAlt: '#E5E3DE93',
-  border:     '#C8C6C03D',
+  bg:         '#FFF2D9',
+  surface:    '#F1E4D6FC',
+  surfaceAlt: '#F0C37F9F',
+  border:     '#5555553D',
   borderSub:  '#C8C6C0',
   ink:        '#111010',
-  muted:      '#6B6860',
-  brand:      '#ffcc24',
+  muted:      '#5C5132',
+  brand:      '#F8C623',
   accents:    color.accents,
 };
 

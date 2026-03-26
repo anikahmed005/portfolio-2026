@@ -1,179 +1,215 @@
 // @ts-nocheck
 import React from 'react';
-import Tag       from '../Tag/Tag';
+import Tag from '../Tag/Tag';
+import CTAButton from '../CTAButton/CTAButton';
 import { useTheme } from '../../context/ThemeContext';
+
+import claudeLogo  from '../../assets/tools/claude.png';
+import figmaLogo   from '../../assets/tools/figma.png';
+import reactLogo   from '../../assets/tools/react.png';
+import geminiLogo  from '../../assets/tools/gemini.png';
+import dovetailLogo  from '../../assets/tools/dovetail.png';
+import photoshopLogo from '../../assets/tools/photoshop.png';
+import { fontSize } from '@ds/tokens/tokens';
+
+export const TOOL_LOGOS = {
+  claude:    claudeLogo,
+  figma:     figmaLogo,
+  react:     reactLogo,
+  gemini:    geminiLogo,
+  dovetail:  dovetailLogo,
+  photoshop: photoshopLogo,
+};
 
 const s = {
   banner: {
-    display:    'flex',
-    width:      '100%',
-    minHeight:  'clamp(95px, 13vh, 145px)',
-    position:   'relative',
-    overflow:   'visible',
-    clipPath:   'inset(-220px 0 0 0)',
+    width:        '100%',
+    borderRadius: 'var(--radius-lg)',
+    overflow:     'hidden',
     marginBottom: '50px',
   },
-
-  /* ── Left: media panel ── */
-  leftPanel: {
-    flex:            '0 0 42%',
-    position:        'relative',
-    overflow:        'visible',
-    display:         'flex',
-    alignItems:      'center',
-    justifyContent:  'center',
-    zIndex:          2,
-  },
-
-  /* phone mockup wrapper — protrudes above and below the banner */
-  phoneWrap: {
-    position:     'relative',
-    width:        '55%',
-    marginTop:    '-20%',
-    marginBottom: '20%',
-  },
-  phoneScreen: {
-    position:     'absolute',
-    top:          '2%',
-    left:         '3.5%',
-    width:        '93%',
-    height:       '94%',
-    zIndex:       3,
-    overflow:     'hidden',
-    borderRadius: '10% / 4%',
-    background:   '#0C0C0B',
-  },
-  phoneVideo: {
-    position:   'absolute',
-    top:        0,
-    left:       0,
-    width:      '100%',
-    height:     '100%',
-    objectFit:  'cover',
-    display:    'block',
-    zIndex:     1,
-  },
-  phoneFrame: {
-    position:      'relative',
-    width:         '100%',
-    display:       'block',
-    zIndex:        2,
-    pointerEvents: 'none',
-    userSelect:    'none',
-  },
-
-  /* static image — protrudes above, clipped at banner bottom by clip-path */
-  bannerImg: {
-    position:  'absolute',
-    top:       '-12px',
-    left:      '50%',
-    transform: 'translateX(-50%)',
-    width:     '80%',
-    height:    'auto',
-    display:   'block',
-  },
-
-  /* ── Right: text panel ── */
-  rightPanel: {
-    flex:           1,
-    display:        'flex',
-    flexDirection:  'column',
-    justifyContent: 'center',
-    padding:        'var(--space-6) var(--space-8)',
+  inner: {
+    display:       'flex',
+    flexDirection: 'column',
+    gap:           'var(--space-3)',
+    padding:       'var(--space-6) var(--space-6) var(--space-6)',
   },
   title: {
     fontFamily:    'var(--font-serif)',
-    fontSize:      'clamp(1.4rem, 3vw, 1.9rem)',
+    fontSize:      'clamp(1.75rem, 3.5vw, 2.5rem)',
     fontWeight:    500,
     letterSpacing: '-0.02em',
-    lineHeight:    1.2,
+    lineHeight:    1.15,
     color:         'var(--color-ink)',
     margin:        0,
-    marginBottom:  'var(--space-3)',
   },
-  meta: {
+  category: {
+    fontFamily: 'var(--font-serif)',
+    fontSize:   'var(--text-base)',
+    fontWeight: 300,
+    fontStyle:  'italic',
+    color:      'var(--color-muted)',
+    margin:     0,
+  },
+  year: {
     fontFamily:    'var(--font-mono)',
-    fontSize:      'var(--text-sm)',
+    fontSize:      'var(--text-xs)',
     fontWeight:    300,
     color:         'var(--color-muted)',
     letterSpacing: '0.02em',
-    marginBottom:  'var(--space-5)',
-  },
-  tldr: {
-    fontFamily:   'var(--font-serif)',
-    fontSize:     'var(--text-base)',
-    fontWeight:   300,
-    fontStyle:    'italic',
-    lineHeight:   1.65,
-    color:        'var(--color-ink)',
-    opacity:      0.85,
-    marginBottom: 'var(--space-6)',
+    margin:        0,
   },
   tags: {
     display:  'flex',
     flexWrap: 'wrap',
     gap:      'var(--space-2)',
+    fontSize: 'clamp(0.75rem)'
+    
   },
-
+  divider: {
+    width:  '100%',
+    height: '1px',
+    background: 'var(--color-muted)',
+    margin: 'var(--space-2) 0',
+  },
+  toolsLabel: {
+    fontFamily:    'var(--font-mono)',
+    fontSize:      'var(--text-xs)',
+    fontWeight:    300,
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    color:         'var(--color-muted)',
+  },
+  toolsRow: {
+    display: 'flex',
+    gap:     'var(--space-3)',
+    flexWrap:'wrap',
+  },
 };
 
 export default function ProjectBanner({ project }) {
   const { theme } = useTheme();
-  const banner = project.banner ?? {};
 
-  const bannerBg = theme === 'light'
-    ? `color-mix(in srgb, ${project.accent} 12%, #EAE7E1)`
-    : project.bg;
+  const titleGradient = theme === 'dark'
+    ? 'linear-gradient(135deg, #a78bfa 0%, #06b6d4 100%)'
+    : 'linear-gradient(135deg, #7c3aed 0%, #0ea5e9 100%)';
+
+  const chipBg     = theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.75)';
+  const chipBorder = theme === 'dark' ? 'rgba(255,255,255,0.13)' : 'rgba(255,255,255,0.85)';
 
   return (
-    <div style={{ ...s.banner, background: bannerBg, borderTop: `15px solid ${project.accent}` }}>
+    <div style={{
+      ...s.banner,
+      background:           theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.6)',
+      backdropFilter:       'blur(14px)',
+      WebkitBackdropFilter: 'blur(14px)',
+      border:               `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.7)'}`,
+      borderBottom:         `2px solid ${project.accent}`,
+      boxShadow:            theme === 'dark' ? '0 4px 24px rgba(0,0,0,0.25)' : '0 4px 20px rgba(0,0,0,0.06)',
+    }}>
+      <div style={s.inner}>
 
-      {/* ── Left: media ── */}
-      <div style={s.leftPanel}>
-        {banner.phone ? (
-          <div style={s.phoneWrap}>
-            <div style={s.phoneScreen}>
-              <video
-                src={banner.phone.video}
-                style={s.phoneVideo}
-                autoPlay
-                loop
-                muted
-                playsInline
-              />
-            </div>
-            <img
-              src={banner.phone.frame}
-              alt=""
-              aria-hidden="true"
-              style={s.phoneFrame}
-            />
-          </div>
-        ) : banner.image ? (
-          <img
-            src={banner.image}
-            alt={project.title}
-            style={s.bannerImg}
-          />
-        ) : (
-          <div style={{ ...s.bannerImg, background: 'var(--color-surface)' }} />
-        )}
-      </div>
+        {/* Title */}
+        <h1 style={{
+          ...s.title,
+          background:           titleGradient,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor:  'transparent',
+          backgroundClip:       'text',
+        }}>
+          {project.title}
+        </h1>
 
-      {/* ── Right: text ── */}
-      <div style={s.rightPanel}>
-        <h1 style={s.title}>{project.title}</h1>
-        <p style={s.meta}>{project.year} · {project.category}</p>
-        {project.tldr && <p style={s.tldr}>{project.tldr}</p>}
+        {/* Category */}
+        {project.category && <p style={s.category}>{project.category}</p>}
+
+        {/* Year */}
+        {project.year && <p style={s.year}>{project.year}</p>}
+
+        {/* Tags */}
         {project.tags?.length > 0 && (
           <div style={s.tags}>
-            {project.tags.map(tag => (
-              <Tag key={tag} label={tag} />
-            ))}
+            {project.tags.map(tag => <Tag key={tag} label={tag} />)}
           </div>
         )}
-      </div>
 
+        {/* Tools */}
+        {project.tools?.length > 0 && (
+          <>
+            <div style={s.divider} />
+            <span style={s.toolsLabel}>Tools Used</span>
+            <div style={s.toolsRow}>
+              {project.tools.map((tool) => (
+                <div
+                  key={tool.name}
+                  title={tool.name}
+                  style={{
+                    display:             'flex',
+                    alignItems:          'center',
+                    justifyContent:      'center',
+                    width:               '48px',
+                    height:              '48px',
+                    borderRadius:        'var(--radius-md)',
+                    background:          chipBg,
+                    backdropFilter:      'blur(10px)',
+                    WebkitBackdropFilter:'blur(10px)',
+                    border:              `1px solid ${chipBorder}`,
+                    padding:             '10px',
+                  }}
+                >
+                  {TOOL_LOGOS[tool.key] && (
+                    <img
+                      src={TOOL_LOGOS[tool.key]}
+                      alt={tool.name}
+                      style={{ width: '28px', height: '28px', objectFit: 'contain' }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* TL;DR */}
+        {project.tldr && (
+          <>
+            <div style={s.divider} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-1)' }}>
+              <span style={{
+                fontFamily:    'var(--font-mono)',
+                fontSize:      'var(--text-xs)',
+                fontWeight:    400,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                color:         'var(--color-ink)',
+              }}>
+                TL;DR
+              </span>
+              <p style={{
+                fontFamily: 'var(--font-serif)',
+                fontSize:   'var(--text-base)',
+                fontWeight: 300,
+                fontStyle:  'italic',
+                lineHeight: 1.6,
+                color:      'var(--color-muted)',
+                margin:     0,
+              }}>
+                {project.tldr}
+              </p>
+            </div>
+          </>
+        )}
+
+        {/* CTA */}
+        {project.cta && (
+          <CTAButton
+            href={project.cta.href}
+            label={project.cta.label}
+            style={{ marginTop: 'var(--space-2)' }}
+          />
+        )}
+
+      </div>
     </div>
   );
 }

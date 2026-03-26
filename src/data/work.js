@@ -11,27 +11,41 @@ export const WORK = [
     bg:       '#0d0520',
     accent:   color.accents.green,
     tags:     ['Mobile App', 'React Native', 'Fintech'],
+    tools: [
+      { key: 'claude', name: 'Claude' },
+      { key: 'figma',  name: 'Figma' },
+      { key: 'react',  name: 'React Native' },
+    ],
     banner: { image: '/BudgetBuddi/screens/hero-image.png' },
     tldr:     'BudgetBuddi is a budgeting AI assisted platform that was built and shipped by me.',
+    cta:      { label: 'Visit BudgetBuddi', href: 'https://budgetbuddi.app/' },
     sections: [
       {
+        headerImage: '/BudgetBuddi/screens/hero-image.png',
         heading: 'Problem',
         paragraphs: [
           'People always try to create a budget for themselves but like a new years gym membership - theyre usually abandoned early on.',
           'My goal was to create a budgeting mobile app that would help people have a budget that fit their goals, maintain functionality, while being lower cost than traditional budgeting apps like YNAB or Monarch.',
         ],
-        videoGrid: {
-          frame:  '/BudgetBuddi/pixel-frame.png',
-          videos: [
-            '/BudgetBuddi/videos/bb-voice-cmd.mp4',
-            '/BudgetBuddi/videos/folders-vid.mp4',
-            '/BudgetBuddi/videos/insights-ft-vid.mp4',
-          ],
-        },
+        // videoGrid: {
+        //   frame:  '/BudgetBuddi/pixel-frame.png',
+        //   videos: [
+        //     '/BudgetBuddi/videos/bb-voice-cmd.mp4',
+        //     '/BudgetBuddi/videos/folders-vid.mp4',
+        //     '/BudgetBuddi/videos/insights-ft-vid.mp4',
+        //   ],
+        // },
       },
       {
         heading: 'Features',
         featureCards: [
+          {
+            icon: 'wallet',
+            title: 'Choose your Budget Plan',
+            body: 'Choose a budget plan based on your needs. Most budgeting apps only have 1 kind of plan but BudgetBuddi gives users a choose of 3 different plans; Zero-Based Budgeting, Envelope/Pay Yourself, & the classic 50/30/20 Split',
+            video: '/BudgetBuddi/videos/foresight-zbb-vid.mp4',
+            frame: '/BudgetBuddi/pixel-frame.png',
+          },
           {
             icon: 'microphone',
             title: 'Voice Commands',
@@ -83,6 +97,10 @@ export const WORK = [
     bg:       '#001525',
     accent:   color.accents.green,
     tags:     ['tablet', 'product', 'automotive'],
+    tools: [
+      { key: 'figma',  name: 'Figma' },
+      { key: 'dovetail',  name: 'Dovetail' },
+    ],
     banner:   { image: '/AutoVision-e/Hero-Image.png' },
     tldr:     'An Autotmotive B2B software for used car dealerships to enable sales to assist clients',
     sections: [
@@ -119,7 +137,13 @@ export const WORK = [
     slug:     'taino-world',
     bg:       '#051a05',
     accent:   color.accents.amber,
+    cta:      { label: 'View live site', href: 'https://www.tainoconference.org/' },
     tags:     ['Freelance', 'UX Design', 'UX Writing', 'Web'],
+    tools: [
+      {key: 'photoshop', name: 'Photoshop'},
+      { key: 'figma',  name: 'Figma' },
+      { key: 'dovetail',  name: 'Dovetail' },
+    ],
     banner:   { image: '/Taino-World/Landing-Page-Hero.jpg' },
     tldr:     'A educational conference web experience built to educate scholars & academics about an indigenous population.',
     sections: [
@@ -146,7 +170,6 @@ export const WORK = [
           'Creation of the Taino World website & increased engagement throughout the conferences lifespan.',
         ],
         image: '/Taino-World/taino-rhythms.jpg',
-        cta: { label: 'View live site', href: 'https://www.tainoconference.org/' },
       },
     ],
   },
@@ -160,6 +183,10 @@ export const WORK = [
     bg:       '#1a1200',
     accent:   color.accents.green,
     tags:     ['Mobile', 'UX research', 'UI Design'],
+    tools: [
+      { key: 'figma',  name: 'Figma' },
+      { key: 'dovetail',  name: 'Dovetail' },
+    ],
     banner:   { image: '/AutoVision-s/group-shot-1.png' },
     tldr:     'As Product Designer and UX Researcher, I worked on AutoVision Mobile, a startup concept aimed at helping used car salespeople manage inventory more efficiently.',
     sections: [
@@ -203,13 +230,17 @@ export const WORK = [
     bg:       '#1a0010',
     accent:   color.accents.pink,
     tags:     ['UI Design', 'Web', 'Challenge'],
+    tools: [
+
+      { key: 'figma',  name: 'Figma' },
+      { key: 'dovetail',  name: 'Dovetail' },
+    ],
     banner:   { image: '/SCORM/tab-switching.gif' },
     tldr:     'Building out a sales funnel as part of a design challenge',
     sections: [
       {
         heading: 'Context',
         paragraphs: [
-          'Version 1 of the design system had grown organically over three years. By 2023 it contained 400+ components with no consistent naming, three competing button styles, and no documentation beyond inline Figma descriptions.',
           'The task was to redesign a dummy page and create a new user flow that met all original product requirements while also supporting the goal of onboarding new users. ',
           'The result was a streamlined, user-friendly design that balanced compliance with a smoother onboarding experience.',
         ],

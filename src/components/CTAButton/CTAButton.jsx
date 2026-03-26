@@ -4,6 +4,7 @@ const base = {
   display:        'inline-flex',
   alignItems:     'center',
   gap:            'var(--space-2)',
+  width:          'fit-content',
   fontFamily:     'var(--font-mono)',
   fontSize:       'var(--text-sm)',
   fontWeight:     300,

@@ -8,6 +8,9 @@ import PageTransition  from '../components/PageTransition/PageTransition';
 import { color }       from '../tokens/tokens';
 import { WORK }        from '../data/work';
 import ThemeToggle     from '../components/ThemeToggle/ThemeToggle';
+import { useTheme }    from '../context/ThemeContext';
+import MdiIcon         from '@mdi/react';
+import { mdiLinkedin, mdiEmailOutline } from '@mdi/js';
 
 // ─── Layout styles ─────────────────────────────────────────────────────────
 const styles = {
@@ -21,10 +24,10 @@ const styles = {
   },
   h1: {
     fontFamily:    'var(--font-serif)',
-    fontSize:      'var(--text-xl)',
+    fontSize:      'clamp(2rem, 6vw, 3rem)',
     fontWeight:    400,
-    letterSpacing: '-0.01em',
-    lineHeight:    1.4,
+    letterSpacing: '-0.02em',
+    lineHeight:    1.15,
     color:         'var(--color-ink)',
     margin:        0,
   },
@@ -58,6 +61,12 @@ const styles = {
 
 // ─── Component ─────────────────────────────────────────────────────────────
 export default function HomePage({ onItemClick }) {
+  const { theme } = useTheme();
+
+  const h1Gradient = theme === 'dark'
+    ? 'linear-gradient(135deg, #a78bfa 0%, #06b6d4 100%)'   // violet → cyan
+    : 'linear-gradient(135deg, #7c3aed 0%, #0ea5e9 100%)';  // violet → sky
+
   const [preview, setPreview] = useState({
     visible: false,
     title:   '',
@@ -99,16 +108,61 @@ export default function HomePage({ onItemClick }) {
           <h1 style={styles.h1}>Anik Ahmed</h1>
 
           <p style={styles.role}>
-            Designer at{' '}
-            <a href="https://example.com" style={styles.roleLink}>
+            Product Designer{' '}
+            {/* <a href="https://example.com" style={styles.roleLink}>
               Studio / Company
-            </a>
+            </a> */}
           </p>
 
           <nav style={styles.nav} aria-label="Primary navigation">
             <NavLink href="/about">About</NavLink>
-            <NavLink href="/connect">Connect</NavLink>
-            <NavLink href="/writing">Writing</NavLink>
+
+            {/* Glassmorphic contact icons */}
+            <a
+              href="https://www.linkedin.com/in/anikahmeddesign/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="LinkedIn"
+              style={{
+                display:             'inline-flex',
+                alignItems:          'center',
+                justifyContent:      'center',
+                width:               '32px',
+                height:              '32px',
+                borderRadius:        'var(--radius-sm)',
+                background:          theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.7)',
+                backdropFilter:      'blur(12px)',
+                WebkitBackdropFilter:'blur(12px)',
+                border:              `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.85)'}`,
+                color:               'var(--color-muted)',
+                textDecoration:      'none',
+                flexShrink:          0,
+              }}
+            >
+              <MdiIcon path={mdiLinkedin} size={0.75} color="var(--color-muted)" />
+            </a>
+            <a
+              href="mailto:anikahmeddesign@gmail.com"
+              title="Email"
+              style={{
+                display:             'inline-flex',
+                alignItems:          'center',
+                justifyContent:      'center',
+                width:               '32px',
+                height:              '32px',
+                borderRadius:        'var(--radius-sm)',
+                background:          theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.7)',
+                backdropFilter:      'blur(12px)',
+                WebkitBackdropFilter:'blur(12px)',
+                border:              `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.85)'}`,
+                color:               'var(--color-muted)',
+                textDecoration:      'none',
+                flexShrink:          0,
+              }}
+            >
+              <MdiIcon path={mdiEmailOutline} size={0.75} color="var(--color-muted)" />
+            </a>
+
             <ThemeToggle />
           </nav>
         </header>

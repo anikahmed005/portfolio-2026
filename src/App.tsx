@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route, useNavigate, useParams, useLocation } fro
 import { useEffect } from 'react'
 import HomePage    from '@ds/screens/HomePage'
 import ProjectPage from '@ds/screens/ProjectPage'
-import DotGrid     from '@ds/components/DotGrid/DotGrid'
+import AboutPage   from '@ds/screens/AboutPage'
+import Aurora      from '@ds/components/Aurora/Aurora'
 import { WORK }    from '@ds/data/work'
 
 function ScrollToTop() {
@@ -22,6 +23,7 @@ function AppRoutes() {
         path="/"
         element={<HomePage onItemClick={(href: string) => navigate(href)} />}
       />
+        <Route path="/about" element={<AboutPage onBack={() => navigate('/')} />} />
         <Route path="/work/:slug" element={<ProjectDetail />} />
       </Routes>
     </>
@@ -61,7 +63,7 @@ function ProjectDetail() {
 export default function App() {
   return (
     <BrowserRouter>
-      <DotGrid />
+      <Aurora />
       <AppRoutes />
     </BrowserRouter>
   )

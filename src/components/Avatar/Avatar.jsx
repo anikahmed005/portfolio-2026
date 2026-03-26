@@ -1,4 +1,5 @@
 import React from 'react';
+import avatarSrc from '../../assets/avatar.jpg';
 
 const styles = {
   avatar: {
@@ -35,11 +36,11 @@ function Placeholder() {
  * @param {string}  alt   - Alt text for the image.
  * @param {object}  style - Optional style overrides.
  */
-export default function Avatar({ src, alt = '', style = {} }) {
+export default function Avatar({ src = avatarSrc, alt = 'Anik Ahmed', style = {} }) {
   return (
     <div style={{ ...styles.avatar, ...style }} aria-hidden={!src}>
       {src
-        ? <img src={src} alt={alt} style={styles.img} />
+        ? <img src={src} alt={alt} style={{ ...styles.img, objectPosition: 'center 15%' }} />
         : <Placeholder />
       }
     </div>

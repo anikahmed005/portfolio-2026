@@ -1,18 +1,97 @@
 // @ts-nocheck
 import React, { useRef, useState, useEffect } from 'react';
+
+function Reveal({ children, delay = 0, style }) {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        ...style,
+        opacity:    visible ? 1 : 0,
+        transform:  visible ? 'translateY(0)' : 'translateY(14px)',
+        transition: `opacity 0.5s ease ${delay}ms, transform 0.5s ease ${delay}ms`,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function SectionH2({ children, baseStyle, gradient }) {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.4 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <h2
+      ref={ref}
+      style={{
+        ...baseStyle,
+        opacity:    visible ? 1 : 0,
+        transform:  visible ? 'translateY(0)' : 'translateY(10px)',
+        transition: 'opacity 0.5s ease, transform 0.5s ease',
+      }}
+    >
+      <span style={{
+        background:           gradient,
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor:  'transparent',
+        backgroundClip:       'text',
+      }}>
+        {children}
+      </span>
+    </h2>
+  );
+}
+
+function useIsMobile(breakpoint = 640) {
+  const [mobile, setMobile] = useState(() => window.innerWidth < breakpoint);
+  useEffect(() => {
+    const fn = () => setMobile(window.innerWidth < breakpoint);
+    window.addEventListener('resize', fn);
+    return () => window.removeEventListener('resize', fn);
+  }, [breakpoint]);
+  return mobile;
+}
 import ProjectBanner  from '../components/ProjectBanner/ProjectBanner';
 import CTAButton      from '../components/CTAButton/CTAButton';
 import Footer         from '../components/Footer/Footer';
 import PageTransition from '../components/PageTransition/PageTransition';
 import NavLink        from '../components/NavLink/NavLink';
 import MediaPreview   from '../components/MediaPreview/MediaPreview';
+import { useTheme }   from '../context/ThemeContext';
 import MdiIcon        from '@mdi/react';
-import { mdiMicrophone, mdiFolderOpen, mdiChartLineVariant } from '@mdi/js';
+import { mdiMicrophone, mdiFolderOpen, mdiChartLineVariant, mdiWallet } from '@mdi/js';
 
 const MDI_ICONS = {
   'microphone':         mdiMicrophone,
   'folder-open':        mdiFolderOpen,
   'chart-line-variant': mdiChartLineVariant,
+  'wallet':             mdiWallet,
 };
 
 const styles = {
@@ -22,16 +101,17 @@ const styles = {
     padding:  'var(--space-10) var(--space-6) 0',
   },
   content: {
-    maxWidth: '600px',
-    margin:   '0 auto',
-    padding:  'var(--space-10) var(--space-6) var(--space-32)',
+    maxWidth:     '780px',
+    margin:       '0 auto var(--space-20)',
+    padding:      'var(--space-10) 20px var(--space-10)',
+    borderRadius: 'var(--radius-lg)',
   },
   section: {
     marginBottom: 'var(--space-10)',
   },
   sectionHeading: {
     fontFamily:    'var(--font-serif)',
-    fontSize:      'var(--text-md)',
+    fontSize:      'clamp(1.3rem, 2.5vw, 1.8rem)',
     fontWeight:    400,
     letterSpacing: '-0.01em',
     lineHeight:    1.35,
@@ -47,17 +127,20 @@ const styles = {
     marginBottom: 'var(--space-3)',
   },
   videoGrid: {
-    display:         'flex',
-    justifyContent:  'center',
-    gap:             'var(--space-4)',
-    marginTop:       'var(--space-8)',
-    marginBottom:    'var(--space-5)',
-    flexWrap:        'wrap',
+    display:      'flex',
+    justifyContent: 'center',
+    gap:          'var(--space-5)',
+    marginTop:    'var(--space-8)',
+    marginBottom: 'var(--space-5)',
+    flexWrap:     'nowrap',
+    /* bleed wider than the 600px content column */
+    marginLeft:   'calc(-1 * var(--space-10))',
+    marginRight:  'calc(-1 * var(--space-10))',
   },
   videoCell: {
-    position:  'relative',
-    flex:      '1 1 0',
-    minWidth:  '80px',
+    position: 'relative',
+    flex:     '1 1 0',
+    minWidth: '0',
   },
   phoneScreen: {
     position:     'absolute',
@@ -114,6 +197,8 @@ const styles = {
     flexDirection: 'column',
     gap:           'var(--space-10)',
     marginTop:     'var(--space-8)',
+    marginLeft:    'calc(-1 * var(--space-10))',
+    marginRight:   'calc(-1 * var(--space-10))',
   },
   featureRow: {
     display:    'flex',
@@ -197,6 +282,16 @@ const styles = {
  * @param {function} props.onBack       - Called when the back link is clicked.
  */
 export default function ProjectPage({ project, onBack }) {
+  const isMobile    = useIsMobile();
+  const { theme }   = useTheme();
+
+  const h2Gradient = theme === 'dark'
+    ? 'linear-gradient(135deg, #ede9fe 0%, #cffafe 100%)'   // very light lavender → very light cyan
+    : 'linear-gradient(135deg, #3b0764 0%, #082f49 100%)';  // darkest violet → darkest navy
+
+  const h3Gradient = theme === 'dark'
+    ? 'linear-gradient(135deg, #ddd6fe 0%, #a5f3fc 100%)'
+    : 'linear-gradient(135deg, #4c1d95 0%, #0c4a6e 100%)';
   const sectionCount = project.sections?.length ?? 0;
   const bannerRef = useRef(null);
   const [showBack, setShowBack] = useState(false);
@@ -257,120 +352,152 @@ export default function ProjectPage({ project, onBack }) {
         {project.sections?.map((section, i) => (
           <PageTransition key={i} delay={(i + 3) * 80}>
           <section style={styles.section}>
-            <h2 style={styles.sectionHeading}>{section.heading}</h2>
+            {section.headerImage && (
+              <Reveal delay={0}>
+                <div
+                  className="img-zoom-wrap"
+                  style={{ marginBottom: 'var(--space-5)', cursor: 'zoom-in' }}
+                  onMouseEnter={() => showPreview(section.headerImage, 'image')}
+                  onMouseLeave={hidePreview}
+                  onPointerDown={(e) => { if (e.pointerType !== 'mouse') togglePreview(section.headerImage, 'image') }}
+                >
+                  <img src={section.headerImage} alt={section.heading} />
+                </div>
+              </Reveal>
+            )}
+            <SectionH2 baseStyle={styles.sectionHeading} gradient={h2Gradient}>{section.heading}</SectionH2>
             {section.paragraphs?.map((p, j) => (
               <React.Fragment key={j}>
-                <p style={styles.paragraph}>{p}</p>
+                <Reveal delay={j * 80}>
+                  <p style={styles.paragraph}>{p}</p>
+                </Reveal>
                 {j === 0 && section.videoGrid && (
-                  <div style={styles.videoGrid}>
-                    {section.videoGrid.videos.map((src, k) => (
-                      <div
-                        key={k}
-                        style={{ ...styles.videoCell, cursor: 'zoom-in' }}
-                        onMouseEnter={() => showPreview(src, 'video')}
-                        onMouseLeave={hidePreview}
-                        onPointerDown={(e) => { if (e.pointerType !== 'mouse') togglePreview(src, 'video') }}
-                      >
-                        <div style={styles.phoneScreen}>
-                          <video
-                            src={src}
-                            style={styles.videoEl}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
+                  <Reveal delay={120}>
+                    <div style={{ ...styles.videoGrid, ...(isMobile && { flexWrap: 'wrap', marginLeft: 0, marginRight: 0 }) }}>
+                      {section.videoGrid.videos.map((src, k) => (
+                        <div
+                          key={k}
+                          style={{ ...styles.videoCell, cursor: 'zoom-in' }}
+                          onMouseEnter={() => showPreview(src, 'video')}
+                          onMouseLeave={hidePreview}
+                          onPointerDown={(e) => { if (e.pointerType !== 'mouse') togglePreview(src, 'video') }}
+                        >
+                          <div style={styles.phoneScreen}>
+                            <video
+                              src={src}
+                              style={styles.videoEl}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                            />
+                          </div>
+                          <img
+                            src={section.videoGrid.frame}
+                            alt=""
+                            aria-hidden="true"
+                            style={styles.videoFrameImg}
                           />
                         </div>
-                        <img
-                          src={section.videoGrid.frame}
-                          alt=""
-                          aria-hidden="true"
-                          style={styles.videoFrameImg}
-                        />
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  </Reveal>
                 )}
               </React.Fragment>
             ))}
             {section.image ? (
-              <img
-                src={section.image}
-                alt={section.heading}
-                style={{
-                  width:        '100%',
-                  borderRadius: 'var(--radius-md)',
-                  border:       '1px solid var(--color-border)',
-                  marginTop:    'var(--space-5)',
-                  marginBottom: 'var(--space-5)',
-                  display:      'block',
-                  cursor:       'zoom-in',
-                }}
-                onMouseEnter={() => showPreview(section.image, 'image')}
-                onMouseLeave={hidePreview}
-                onPointerDown={(e) => { if (e.pointerType !== 'mouse') togglePreview(section.image, 'image') }}
-              />
+              <Reveal delay={60}>
+                <div
+                  className="img-zoom-wrap"
+                  style={{ marginTop: 'var(--space-5)', marginBottom: 'var(--space-5)', cursor: 'zoom-in' }}
+                  onMouseEnter={() => showPreview(section.image, 'image')}
+                  onMouseLeave={hidePreview}
+                  onPointerDown={(e) => { if (e.pointerType !== 'mouse') togglePreview(section.image, 'image') }}
+                >
+                  <img src={section.image} alt={section.heading} />
+                </div>
+              </Reveal>
             ) : section.imagePlaceholder ? (
-              <div style={styles.imagePlaceholder}>
-                <span style={styles.imagePlaceholderLabel}>
-                  {section.imagePlaceholder}
-                </span>
-              </div>
+              <Reveal delay={60}>
+                <div style={styles.imagePlaceholder}>
+                  <span style={styles.imagePlaceholderLabel}>
+                    {section.imagePlaceholder}
+                  </span>
+                </div>
+              </Reveal>
             ) : null}
             {section.columns && (
-              <div style={{ display: 'flex', gap: 'var(--space-5)', marginTop: 'var(--space-5)' }}>
-                {section.columns.map((col, k) => (
-                  <div key={k} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                    {col.heading && <h3 style={styles.sectionHeading}>{col.heading}</h3>}
-                    {col.body && <p style={styles.paragraph}>{col.body}</p>}
-                  </div>
-                ))}
-              </div>
+              <Reveal delay={80}>
+                <div style={{ display: 'flex', flexWrap: isMobile ? 'wrap' : 'nowrap', gap: 'var(--space-5)', marginTop: 'var(--space-5)' }}>
+                  {section.columns.map((col, k) => (
+                    <div key={k} style={{ flex: isMobile ? '1 1 100%' : 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                      {col.heading && <h3 style={{ ...styles.sectionHeading, background: h3Gradient, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{col.heading}</h3>}
+                      {col.body && <p style={styles.paragraph}>{col.body}</p>}
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
             )}
             {section.featureCards && (
               <div style={styles.featureList}>
                 {section.featureCards.map((card, k) => (
-                  <div key={k} style={styles.featureRow}>
-                    {/* Text */}
-                    <div style={styles.featureText}>
-                      {MDI_ICONS[card.icon] && (
-                        <div style={styles.featureIcon}>
-                          <MdiIcon path={MDI_ICONS[card.icon]} size={1.1} color="var(--color-muted)" />
-                        </div>
-                      )}
-                      <h3 style={styles.featureTitle}>{card.title}</h3>
-                      <p style={styles.featureBody}>{card.body}</p>
-                    </div>
-                    {/* Dark media card */}
-                    <div
-                      style={{ ...styles.featureCard, background: project.bg, cursor: 'zoom-in' }}
-                      onMouseEnter={() => { const s = card.video ?? card.image; if (s) showPreview(s, card.video ? 'video' : 'image') }}
-                      onMouseLeave={hidePreview}
-                      onPointerDown={(e) => { if (e.pointerType !== 'mouse') { const s = card.video ?? card.image; if (s) togglePreview(s, card.video ? 'video' : 'image') } }}
-                    >
-                      {card.frame && card.video ? (
-                        <div style={styles.featurePhoneWrap}>
-                          <div style={styles.featurePhoneScreen}>
-                            <video
-                              src={card.video}
-                              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
-                              autoPlay loop muted playsInline
+                  <Reveal key={k} delay={k * 120}>
+                    <div style={{
+                      ...styles.featureRow,
+                      ...(isMobile && { flexDirection: 'column' }),
+                      padding:             '20px',
+                      borderRadius:        'var(--radius-lg)',
+                      background:          theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.6)',
+                      backdropFilter:      'blur(14px)',
+                      WebkitBackdropFilter:'blur(14px)',
+                      border:              `1px solid ${theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.7)'}`,
+                      boxShadow:           theme === 'dark' ? '0 4px 24px rgba(0,0,0,0.25)' : '0 4px 20px rgba(0,0,0,0.06)',
+                    }}>
+                      {/* Text */}
+                      <div style={{ ...styles.featureText, ...(isMobile && { flex: 'none', width: '100%' }) }}>
+                        {MDI_ICONS[card.icon] && (
+                          <div style={styles.featureIcon}>
+                            <MdiIcon path={MDI_ICONS[card.icon]} size={1.1} color="var(--color-muted)" />
+                          </div>
+                        )}
+                        <h3 style={{ ...styles.featureTitle, background: h3Gradient, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{card.title}</h3>
+                        <p style={styles.featureBody}>{card.body}</p>
+                      </div>
+                      {/* Media card */}
+                      <div
+                        style={{
+                          ...styles.featureCard,
+                          background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+                          cursor: 'zoom-in',
+                        }}
+                        onMouseEnter={() => { const s = card.video ?? card.image; if (s) showPreview(s, card.video ? 'video' : 'image') }}
+                        onMouseLeave={hidePreview}
+                        onPointerDown={(e) => { if (e.pointerType !== 'mouse') { const s = card.video ?? card.image; if (s) togglePreview(s, card.video ? 'video' : 'image') } }}
+                      >
+                        {card.frame && card.video ? (
+                          <div style={styles.featurePhoneWrap}>
+                            <div style={styles.featurePhoneScreen}>
+                              <video
+                                src={card.video}
+                                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}
+                                autoPlay loop muted playsInline
+                              />
+                            </div>
+                            <img
+                              src={card.frame}
+                              alt=""
+                              aria-hidden="true"
+                              style={{ position: 'relative', width: '100%', display: 'block', zIndex: 2, pointerEvents: 'none', userSelect: 'none' }}
                             />
                           </div>
-                          <img
-                            src={card.frame}
-                            alt=""
-                            aria-hidden="true"
-                            style={{ position: 'relative', width: '100%', display: 'block', zIndex: 2, pointerEvents: 'none', userSelect: 'none' }}
-                          />
-                        </div>
-                      ) : card.image ? (
-                        <img src={card.image} alt={card.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      ) : card.video ? (
-                        <video src={card.video} style={{ width: '100%', height: '100%', objectFit: 'cover' }} autoPlay loop muted playsInline />
-                      ) : null}
+                        ) : card.image ? (
+                          <img src={card.image} alt={card.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        ) : card.video ? (
+                          <video src={card.video} style={{ width: '100%', height: '100%', objectFit: 'cover' }} autoPlay loop muted playsInline />
+                        ) : null}
+                      </div>
                     </div>
-                  </div>
+                  </Reveal>
                 ))}
               </div>
             )}
