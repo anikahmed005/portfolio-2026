@@ -4,12 +4,13 @@ import Tag from '../Tag/Tag';
 import CTAButton from '../CTAButton/CTAButton';
 import { useTheme } from '../../context/ThemeContext';
 
-import claudeLogo  from '../../assets/tools/claude.png';
-import figmaLogo   from '../../assets/tools/figma.png';
-import reactLogo   from '../../assets/tools/react.png';
-import geminiLogo  from '../../assets/tools/gemini.png';
+import claudeLogo    from '../../assets/tools/claude.png';
+import figmaLogo     from '../../assets/tools/figma.png';
+import reactLogo     from '../../assets/tools/react.png';
+import geminiLogo    from '../../assets/tools/gemini.png';
 import dovetailLogo  from '../../assets/tools/dovetail.png';
 import photoshopLogo from '../../assets/tools/photoshop.png';
+import googlePlayBadge from '../../assets/GetItOnGooglePlay_Badge_Web_color_English.png';
 import { fontSize } from '@ds/tokens/tokens';
 
 export const TOOL_LOGOS = {
@@ -188,7 +189,7 @@ export default function ProjectBanner({ project }) {
               <p style={{
                 fontFamily: 'var(--font-serif)',
                 fontSize:   'var(--text-base)',
-                fontWeight: 300,
+                fontWeight: 600,
                 fontStyle:  'italic',
                 lineHeight: 1.6,
                 color:      'var(--color-muted)',
@@ -201,12 +202,29 @@ export default function ProjectBanner({ project }) {
         )}
 
         {/* CTA */}
-        {project.cta && (
-          <CTAButton
-            href={project.cta.href}
-            label={project.cta.label}
-            style={{ marginTop: 'var(--space-2)' }}
-          />
+        {(project.cta || project.googlePlayHref) && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
+            {project.cta && (
+              <CTAButton
+                href={project.cta.href}
+                label={project.cta.label}
+              />
+            )}
+            {project.googlePlayHref && (
+              <a
+                href={project.googlePlayHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}
+              >
+                <img
+                  src={googlePlayBadge}
+                  alt="Get it on Google Play"
+                  style={{ height: '36px', width: 'auto', display: 'block' }}
+                />
+              </a>
+            )}
+          </div>
         )}
 
       </div>

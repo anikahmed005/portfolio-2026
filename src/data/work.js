@@ -1,4 +1,5 @@
 import { color } from '../tokens/tokens';
+import BudgetBuddiIA from '../components/BudgetBuddiIA/BudgetBuddiIA';
 
 export const WORK = [
   {
@@ -17,25 +18,119 @@ export const WORK = [
       { key: 'react',  name: 'React Native' },
     ],
     banner: { image: '/BudgetBuddi/screens/hero-image.png' },
-    tldr:     'BudgetBuddi is a budgeting AI assisted platform that was built and shipped by me.',
-    cta:      { label: 'Visit BudgetBuddi', href: 'https://budgetbuddi.app/' },
+    tldr:          'BudgetBuddi is a budgeting AI assisted platform that was built and shipped by me.',
+    cta:           { label: 'Visit BudgetBuddi', href: 'https://budgetbuddi.app/' },
+    googlePlayHref: 'https://play.google.com/store/apps/details?id=com.anikahmed005.DoughNote',
     sections: [
       {
         headerImage: '/BudgetBuddi/screens/hero-image.png',
         heading: 'Problem',
         paragraphs: [
-          'People always try to create a budget for themselves but like a new years gym membership - theyre usually abandoned early on.',
-          'My goal was to create a budgeting mobile app that would help people have a budget that fit their goals, maintain functionality, while being lower cost than traditional budgeting apps like YNAB or Monarch.',
+          'Most budgeting apps ask you to subscribe to their process. They arrive with a methodology already baked in — you\'re budgeting the YNAB way or the Monarch way, and as you go deeper, the complexity stacks up. Category rules, scheduled transactions, reports you have to configure yourself.',
+          'By the time you understand the system, you\'ve already paid for a year of it. That pay-upfront model creates a predictable churn cycle: people sign up in a moment of financial motivation, bounce when the learning curve hits, and move on to the next app.',
+          {
+            segments: [
+              { text: 'The question I kept coming back to was: ' },
+              { text: 'how might I reduce that complexity while still giving users the flexibility to budget the way they actually think — and remove the pressure of paying before they know if it even works for them?', highlight: true },
+            ],
+          },
         ],
-        // videoGrid: {
-        //   frame:  '/BudgetBuddi/pixel-frame.png',
-        //   videos: [
-        //     '/BudgetBuddi/videos/bb-voice-cmd.mp4',
-        //     '/BudgetBuddi/videos/folders-vid.mp4',
-        //     '/BudgetBuddi/videos/insights-ft-vid.mp4',
-        //   ],
-        // },
       },
+      // {
+      //   type: 'expandableProcess',
+      //   label: 'Read the full process',
+      //   sections: [
+      //     {
+      //       heading: 'Discovery',
+      //       paragraphs: [
+      //         {
+      //           segments: [
+      //             { text: 'The research started where most honest feedback lives — the one and three-star reviews of YNAB, Monarch, and Copilot. The signal wasn\'t "this app is bad." It was "I couldn\'t figure out how to make this work for my situation." People weren\'t rejecting budgeting. ' },
+      //             { text: 'They were rejecting being told how to budget.', highlight: true },
+      //           ],
+      //         },
+      //         'Two other patterns kept surfacing. First, people log their finances in natural language — "I pay about $80 for electric" — not structured forms. Forcing a category picker on every entry was a consistent friction point across every app I audited. Second, the budgeting tools that survived in people\'s routines were largely passive — they showed you what you spent without demanding active maintenance. Apps that required daily input bled users.',
+      //       ],
+      //       imageRow: [
+      //         '/BudgetBuddi/feedback/YNAB-1.png',
+      //         '/BudgetBuddi/feedback/monarch-1.png',
+      //         '/BudgetBuddi/feedback/YNAB-3.png',
+      //         '/BudgetBuddi/feedback/YNAB-2.png',
+      //       ],
+      //     },
+      //     {
+      //       heading: 'Define',
+      //       paragraphs: [
+      //         'Defining the goals of the project was tough, but through viewing recent reviews for other budgeting apps, and listening to user testimonials,I was able to figure out 3 goals of the project.',
+      //       ],
+      //       columns: [
+      //         {
+      //           icon: 'speedometer',
+      //           tag: 'User Goal',
+      //           heading: 'Log anything in 10 seconds',
+      //           body: 'Add a bill, transaction, or income source without categorising or configuring anything upfront.',
+      //         },
+      //         {
+      //           icon: 'eye-outline',
+      //           tag: 'User Goal',
+      //           heading: 'Understand without building',
+      //           body: 'See your financial picture clearly. The app does the interpretation — not just the storage.',
+      //         },
+      //         {
+      //           icon: 'lock-open-outline',
+      //           tag: 'Product Goal',
+      //           heading: 'Value before the paywall',
+      //           body: 'The core loop — logging, tracking, spending overview — is free. AI features and deeper analytics unlock after users know it works for them.',
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       heading: 'Key Design Decisions',
+      //       decisions: [
+      //         {
+      //           paragraphs: [
+      //             'The CommandBar grew out of the friction audit. Rather than entry points scattered across navigation, a persistent floating bar sits above the tab navigator on every screen.',
+      //             { segments: [{ text: 'It combines three modes in one surface: a natural language field where Claude Haiku parses voice commands, into a structured bill and presents a one-tap confirmation card, a voice input that runs through the same pipeline, and shortcut pills for users who prefer structured forms.', highlight: true }] },
+      //             'The state machine is simple — idle, focused, loading, confirming — and the fastest path to a logged item is two taps.',
+      //           ],
+      //           imagePlaceholder: 'CommandBar — NL entry → confirmation card',
+      //         },
+      //         {
+      //           paragraphs: [
+      //             'Foresight came from a different insight: personalised advice lands differently than generic advice. A "try the 50/30/20 rule" tip does nothing.',
+      //             { segments: [{ text: 'Instead, Foresight runs a chat-style setup wizard collecting income, methodology preference, timeline, and financial priorities,', highlight: true }] },
+      //             { segments: [
+      //               { text: 'afterwards Foresight calls Claude.ai to ' },
+      //               { text: 'generate an actual plan based on 3 different budgeting methodologies,', highlight: true },
+      //               { text: ' with dollar allocations and a written rationale for why those numbers make sense for your situation.' },
+      //             ]},
+      //           ],
+      //           imagePlaceholder: 'Foresight wizard — methodology selection screen',
+      //           reverse: true,
+      //         },
+      //         // {
+      //         //   body: 'Onboarding branches at a single question: how do you want to connect your finances? The manual path is income → first bill → done. The Plaid path connects your bank, analyzes your last 90 days of transactions, surfaces detected recurring bills for review, and exits with a mostly-populated app. Both paths reach the same place — one just requires more trust upfront.',
+      //         //   imagePlaceholder: 'Onboarding flow — manual vs. Plaid connection paths',
+      //         // },
+      //       ],
+      //     },
+      //     {
+      //       heading: 'Deppreciated Features',
+      //       imagePlaceholder: 'BudgetChat — removed feature screenshot',
+      //       imagePlaceholderTop: true,
+      //       paragraphs: [
+      //         'BudgetChat was a CommandBar shortcut where users could ask free-form questions about their spending and receive a structured AI response with a confidence rating and source citations. After some initial testing, it was decided that the feature was not providing enough value to the users and was removed.',
+      //       ],
+      //     },
+      //     {
+      //       heading: 'Security',
+      //       paragraphs: [
+      //         'Because this is a financial app, a full OWASP Top 10 audit ran before any external testing. Two critical findings were fixed: a missing ownership check on Plaid\'s transaction sync endpoint — any valid session token could trigger a sync for another user\'s bank account — and financial entity names leaking into device logs through console.log calls, visible via adb logcat on any connected Android device.',
+      //         'Eight further high and medium findings were resolved, including a 30-minute inactivity sign-out, request body validation across every edge function, abort timeouts on all AI calls, and a guard preventing Plaid access tokens from being stored if the exchange request failed. All sensitive tokens — Anthropic API key, Plaid client secret, access tokens — are server-side only and never reach the client bundle.',
+      //       ],
+      //     },
+      //   ],
+      // },
       {
         heading: 'Features',
         featureCards: [
@@ -70,20 +165,12 @@ export const WORK = [
         ],
       },
       {
-        heading: 'Process',
-        paragraphs: [
-          'A lot of my process starting from a point of view of what different potential users & customers would want. This included reading most recent reviews of competitors, understanding the architecture of how these budgeting apps work, push the boundary in order to find a differentiator to Budgetbuddi and ultimately, getting preliminary feedback from people about early prototypes.',
-          'In terms of building out a foundation, that required systemically building a foundation for a design system, reusable components, and then moving forward from there. (Too complex to put into text tbh)',
-        ],
-        image: '/BudgetBuddi/screens/planning-ft.png',
-      },
-      {
         heading: 'Outcome',
         paragraphs: [
-          'Currently BudgetBuddi is in closed testing to pass through the google play store & the IOS app store, though it has proven to be a a potentially successful product through preliminary testings',
-          'From testing 5 users, I had learned what they preferred from a manual input app, to wanting more organization for their bills/transactions, and most important of all, - with the AI features, users wanted indirect help in the form of tips, analyzing patterns, and mroe passive intergration of AI so it is not annoying.' 
+          'BudgetBuddi is currently in closed testing ahead of submissions to the Google Play Store and Apple App Store. Early testing with 17 users surfaced a clear pattern when it came to testing the app. Many stated that do find the apps design to be "professional" and "polished" but sometimes logging in bills/transactions was confusing or there was a bug. ',
+          { segments: [{ text: 'All in all, all 17 testers were able to complete the tasks at hand with less than 5 critical errors, no crashing and no major usability issues were found.', highlight: true }] },
         ],
-        image: '/BudgetBuddi/screens/organization-ft.png'
+        image: '/BudgetBuddi/screens/organization-ft.png',
       },
     ],
   },

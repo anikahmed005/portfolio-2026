@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-const W = 480; // preview width px
+const W = 680; // preview width px
 
 const s = {
   card: {
@@ -100,7 +100,7 @@ export default function MediaPreview({ visible, src, type, onDismiss }) {
   const mediaStyle = {
     display:   'block',
     width:     '100%',
-    maxHeight: '320px',
+    maxHeight: '480px',
     objectFit: 'contain',
   };
 
@@ -121,12 +121,20 @@ export default function MediaPreview({ visible, src, type, onDismiss }) {
 
   // ── Desktop: cursor-following card ───────────────────────────────────────
   return (
-    <div
-      ref={cardRef}
-      style={{ ...s.card, ...(visible ? s.visible : s.hidden) }}
-      aria-hidden="true"
-    >
-      {media}
-    </div>
+    <>
+      {visible && (
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 999 }}
+          onClick={onDismiss}
+        />
+      )}
+      <div
+        ref={cardRef}
+        style={{ ...s.card, ...(visible ? s.visible : s.hidden) }}
+        aria-hidden="true"
+      >
+        {media}
+      </div>
+    </>
   );
 }

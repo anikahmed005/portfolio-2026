@@ -7,15 +7,18 @@ import Footer          from '../components/Footer/Footer';
 import PageTransition  from '../components/PageTransition/PageTransition';
 import { color }       from '../tokens/tokens';
 import { WORK }        from '../data/work';
-import ThemeToggle     from '../components/ThemeToggle/ThemeToggle';
-import { useTheme }    from '../context/ThemeContext';
+import ThemeToggle        from '../components/ThemeToggle/ThemeToggle';
+import { useTheme }       from '../context/ThemeContext';
+import ToolsCarousel      from '../components/ToolsCarousel/ToolsCarousel';
+import ExperienceTimeline from '../components/ExperienceTimeline/ExperienceTimeline';
+import SideNav            from '../components/SideNav/SideNav';
 import MdiIcon         from '@mdi/react';
 import { mdiLinkedin, mdiEmailOutline } from '@mdi/js';
 
 // ─── Layout styles ─────────────────────────────────────────────────────────
 const styles = {
   page: {
-    maxWidth:      '560px',
+    maxWidth:      '610px',
     margin:        '0 auto',
     padding:       'var(--space-20) var(--space-6) var(--space-32)',
   },
@@ -87,6 +90,8 @@ export default function HomePage({ onItemClick }) {
 
   return (
     <>
+      <SideNav />
+
       {/* Floating preview card — rendered outside the page flow */}
       <PreviewCard
         visible={preview.visible}
@@ -168,8 +173,16 @@ export default function HomePage({ onItemClick }) {
         </header>
         </PageTransition>
 
+        {/* ── Tools + Experience ── */}
+        <PageTransition delay={120}>
+          <ToolsCarousel />
+          <div id="experience">
+            <ExperienceTimeline />
+          </div>
+        </PageTransition>
+
         {/* ── Work list ── */}
-        <ul style={styles.workList}>
+        <ul id="projects" style={styles.workList}>
           {WORK.map((item, i) => (
             <WorkItem
               key={item.id}

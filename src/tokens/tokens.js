@@ -33,7 +33,7 @@ export const color = {
 
 export const font = {
   serif: "'Newsreader', Georgia, serif",
-  mono:  "'Geist Mono', 'Fira Mono', monospace",
+  mono:  "'Figtree', sans-serif",
 };
 
 export const fontSize = {

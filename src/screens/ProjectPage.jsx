@@ -68,6 +68,313 @@ function SectionH2({ children, baseStyle, gradient }) {
   );
 }
 
+function ExpandableProcess({ section, sectionStyles, theme, isMobile, h2Gradient, h3Gradient, renderParagraph, onZoomStart, onZoomEnd }) {
+  const [open, setOpen]                 = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
+  const [buttonAbove, setButtonAbove]   = useState(false);
+  const [indicatorLeft, setIndicatorLeft] = useState(-999);
+
+  const contentRef   = useRef(null);
+  const buttonRef    = useRef(null);
+  const wrapperRef   = useRef(null);
+  const openTimer    = useRef(null);
+  const closeTimer   = useRef(null);
+
+  const borderColor = theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+  const mutedColor  = theme === 'dark' ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.35)';
+  const glassBg     = theme === 'dark'
+    ? 'color-mix(in srgb, var(--color-bg) 50%, transparent)'
+    : 'color-mix(in srgb, var(--color-bg) 65%, transparent)';
+
+  const toggle = () => {
+    clearTimeout(openTimer.current);
+    clearTimeout(closeTimer.current);
+    if (!open) {
+      setOpen(true);
+      openTimer.current = setTimeout(() => setContentVisible(true), 80);
+    } else {
+      setContentVisible(false);
+      closeTimer.current = setTimeout(() => setOpen(false), 220);
+    }
+  };
+
+  const collapseAndReturn = () => {
+    toggle();
+    setTimeout(() => {
+      wrapperRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 40);
+  };
+
+  // Watch for the toggle button scrolling above the viewport
+  useEffect(() => {
+    if (!open || !buttonRef.current) { setButtonAbove(false); return; }
+    const obs = new IntersectionObserver(
+      ([entry]) => setButtonAbove(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    obs.observe(buttonRef.current);
+    return () => obs.disconnect();
+  }, [open]);
+
+  // Calculate pixel position of left-side indicator
+  useEffect(() => {
+    if (!open) return;
+    const calc = () => {
+      if (!wrapperRef.current) return;
+      const left = wrapperRef.current.getBoundingClientRect().left;
+      setIndicatorLeft(left + 10);
+    };
+    calc();
+    window.addEventListener('resize', calc, { passive: true });
+    return () => window.removeEventListener('resize', calc);
+  }, [open]);
+
+  useEffect(() => () => { clearTimeout(openTimer.current); clearTimeout(closeTimer.current); }, []);
+
+  // Show left indicator on desktop once the toggle button has scrolled above viewport
+  const showSideIndicator = open && buttonAbove && !isMobile;
+
+  return (
+    <>
+      {/* Left-side sticky collapse indicator — fixed at the left edge of the card */}
+      {showSideIndicator && (
+        <div
+          onClick={collapseAndReturn}
+          title="Collapse"
+          style={{
+            position:             'fixed',
+            top:                  '50vh',
+            left:                 indicatorLeft + 'px',
+            transform:            'translateY(-50%)',
+            zIndex:               200,
+            cursor:               'pointer',
+            display:              'flex',
+            alignItems:           'center',
+            justifyContent:       'center',
+            width:                '28px',
+            height:               '28px',
+            borderRadius:         '50%',
+            border:               `1px solid ${borderColor}`,
+            background:           theme === 'dark'
+              ? 'color-mix(in srgb, var(--color-bg) 72%, transparent)'
+              : 'color-mix(in srgb, var(--color-bg) 82%, transparent)',
+            backdropFilter:       'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+            boxShadow:            '0 2px 12px rgba(0,0,0,0.18)',
+          }}
+        >
+          <svg width="11" height="11" viewBox="0 0 14 14" fill="none" style={{ color: mutedColor }}>
+            <path d="M2 9l5-5 5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      )}
+
+      {/* Main expandable card */}
+      <div
+        ref={wrapperRef}
+        style={{
+          marginBottom:         'var(--space-10)',
+          borderRadius:         open ? 'var(--radius-lg)' : '0',
+          border:               open ? `1px solid ${borderColor}` : 'none',
+          background:           open ? glassBg : 'none',
+          backdropFilter:       open ? 'blur(20px) saturate(1.4)' : 'none',
+          WebkitBackdropFilter: open ? 'blur(20px) saturate(1.4)' : 'none',
+          transition:           'background 0.4s ease, border-radius 0.3s ease',
+        }}
+      >
+        {/* Toggle row */}
+        <button
+          ref={buttonRef}
+          onClick={toggle}
+          style={{
+            display:         'flex',
+            alignItems:      'center',
+            justifyContent:  'space-between',
+            width:           '100%',
+            padding:         open ? 'var(--space-4) var(--space-5)' : 'var(--space-4) 0',
+            background:      'none',
+            border:          'none',
+            borderTop:       open ? 'none' : `1px solid ${borderColor}`,
+            borderBottom:    `1px solid ${borderColor}`,
+            cursor:          'pointer',
+            gap:             'var(--space-4)',
+            transition:      'padding 0.3s ease',
+          }}
+        >
+          <span style={{
+            fontFamily:    'var(--font-mono)',
+            fontSize:      'var(--text-sm)',
+            fontWeight:    400,
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            color:         mutedColor,
+          }}>
+            {section.label ?? 'Read the full process'}
+          </span>
+          <svg
+            width="14" height="14" viewBox="0 0 14 14" fill="none"
+            style={{
+              flexShrink: 0,
+              color:      mutedColor,
+              transform:  open ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.35s cubic-bezier(0.22,1,0.36,1)',
+            }}
+          >
+            <path d="M2 5l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+
+        {/* Collapsible body */}
+        <div
+          ref={contentRef}
+          style={{
+            overflow:   'hidden',
+            maxHeight:  open ? (contentRef.current ? contentRef.current.scrollHeight + 'px' : '9999px') : '0px',
+            transition: 'max-height 0.55s cubic-bezier(0.22,1,0.36,1)',
+          }}
+        >
+          <div style={{
+            padding:    `var(--space-8) var(--space-5) var(--space-6) 48px`,
+            opacity:    contentVisible ? 1 : 0,
+            transition: 'opacity 0.4s ease',
+          }}>
+            {section.sections?.map((sub, i) => (
+              <div
+                key={i}
+                style={{
+                  marginBottom: 'var(--space-10)',
+                  opacity:      contentVisible ? 1 : 0,
+                  transform:    contentVisible ? 'translateY(0)' : 'translateY(10px)',
+                  transition:   `opacity 0.45s ease ${i * 70 + 80}ms, transform 0.45s ease ${i * 70 + 80}ms`,
+                }}
+              >
+                {sub.heading && (
+                  <h2 style={{
+                    ...sectionStyles.sectionHeading,
+                    background:           h2Gradient,
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor:  'transparent',
+                    backgroundClip:       'text',
+                  }}>
+                    {sub.heading}
+                  </h2>
+                )}
+                {sub.imagePlaceholderTop && (
+                  <div style={sectionStyles.imagePlaceholder}>
+                    <span style={sectionStyles.imagePlaceholderLabel}>{sub.imagePlaceholder}</span>
+                  </div>
+                )}
+                {sub.paragraphs?.map((p, j) => (
+                  <p key={j} style={sectionStyles.paragraph}>{renderParagraph(p)}</p>
+                ))}
+                {sub.image ? (
+                  <div style={{ marginTop: 'var(--space-5)', marginBottom: 'var(--space-5)' }}>
+                    <img src={sub.image} alt={sub.heading} style={{ width: '100%', borderRadius: 'var(--radius-md)' }} />
+                  </div>
+                ) : sub.component ? (
+                  <sub.component />
+                ) : sub.imageRow ? (
+                  <div style={{
+                    display:             'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                    gap:                 'var(--space-4)',
+                    alignItems:          'start',
+                    marginTop:           'var(--space-5)',
+                    marginBottom:        'var(--space-5)',
+                  }}>
+                    {sub.imageRow.map((src, k) => (
+                      <div
+                        key={k}
+                        className="img-zoom-wrap"
+                        style={{ cursor: 'zoom-in' }}
+                        onPointerDown={onZoomStart ? onZoomStart(src, 'image') : undefined}
+                        onPointerUp={onZoomEnd}
+                        onPointerCancel={onZoomEnd}
+                      >
+                        <img
+                          src={src}
+                          alt=""
+                          style={{ width: '100%', borderRadius: 'var(--radius-md)', display: 'block' }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : !sub.imagePlaceholderTop && sub.imagePlaceholder ? (
+                  <div style={sectionStyles.imagePlaceholder}>
+                    <span style={sectionStyles.imagePlaceholderLabel}>{sub.imagePlaceholder}</span>
+                  </div>
+                ) : null}
+                {sub.columns && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: isMobile ? 'column' : 'row', marginTop: 'var(--space-8)' }}>
+                    {sub.columns.map((col, k) => (
+                      <GoalColumn
+                        key={k}
+                        col={col}
+                        headingStyle={sectionStyles.sectionHeading}
+                        paragraphStyle={sectionStyles.paragraph}
+                        h3Gradient={h3Gradient}
+                        theme={theme}
+                        renderParagraph={renderParagraph}
+                        isLast={k === sub.columns.length - 1}
+                        isMobile={isMobile}
+                      />
+                    ))}
+                  </div>
+                )}
+                {sub.decisions && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)', marginTop: 'var(--space-6)' }}>
+                    {sub.decisions.map((decision, k) => {
+                      const reversed = !isMobile && decision.reverse;
+                      const text = decision.paragraphs ? (
+                        <div style={{ flex: '0 0 42%', display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                          {decision.paragraphs.map((p, j) => (
+                            <p key={j} style={{ ...sectionStyles.paragraph, margin: 0 }}>{renderParagraph(p)}</p>
+                          ))}
+                        </div>
+                      ) : (
+                        <p style={{ ...sectionStyles.paragraph, flex: '0 0 42%', margin: 0 }}>
+                          {renderParagraph(decision.body)}
+                        </p>
+                      );
+                      const placeholder = (
+                        <div style={{
+                          ...sectionStyles.imagePlaceholder,
+                          flex:        1,
+                          margin:      0,
+                          minHeight:   '180px',
+                          aspectRatio: 'unset',
+                        }}>
+                          <span style={sectionStyles.imagePlaceholderLabel}>
+                            {decision.imagePlaceholder}
+                          </span>
+                        </div>
+                      );
+                      return (
+                        <div
+                          key={k}
+                          style={{
+                            display:       'flex',
+                            gap:           'var(--space-8)',
+                            alignItems:    'center',
+                            flexDirection: isMobile ? 'column' : 'row',
+                          }}
+                        >
+                          {reversed ? placeholder : text}
+                          {reversed ? text : placeholder}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function useIsMobile(breakpoint = 640) {
   const [mobile, setMobile] = useState(() => window.innerWidth < breakpoint);
   useEffect(() => {
@@ -83,25 +390,86 @@ import Footer         from '../components/Footer/Footer';
 import PageTransition from '../components/PageTransition/PageTransition';
 import NavLink        from '../components/NavLink/NavLink';
 import MediaPreview   from '../components/MediaPreview/MediaPreview';
+import Highlight      from '../components/Highlight/Highlight';
 import { useTheme }   from '../context/ThemeContext';
 import MdiIcon        from '@mdi/react';
-import { mdiMicrophone, mdiFolderOpen, mdiChartLineVariant, mdiWallet } from '@mdi/js';
+import { mdiMicrophone, mdiFolderOpen, mdiChartLineVariant, mdiWallet, mdiSpeedometer, mdiEyeOutline, mdiLockOpenOutline } from '@mdi/js';
 
 const MDI_ICONS = {
   'microphone':         mdiMicrophone,
   'folder-open':        mdiFolderOpen,
   'chart-line-variant': mdiChartLineVariant,
   'wallet':             mdiWallet,
+  'speedometer':        mdiSpeedometer,
+  'eye-outline':        mdiEyeOutline,
+  'lock-open-outline':  mdiLockOpenOutline,
 };
+
+// Shared column card — used by both main section columns and expandable sub-section columns.
+// Renders a card with optional icon, tag label, heading, and body.
+function GoalColumn({ col, headingStyle, paragraphStyle, h3Gradient, theme, renderParagraph, isLast, isMobile }) {
+  const isDark  = theme === 'dark';
+  const hasIcon = col.icon && MDI_ICONS[col.icon];
+  const dividerColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+  return (
+    <div style={{
+      flex:          isMobile ? '1 1 100%' : '1 1 0',
+      minWidth:      0,
+      display:       'flex',
+      flexDirection: 'column',
+      alignItems:    'flex-start',
+      gap:           'var(--space-3)',
+      padding:       isMobile ? 'var(--space-4) 0' : '0 var(--space-5)',
+      borderRight:   !isMobile && !isLast ? `1px solid ${dividerColor}` : 'none',
+      borderBottom:  isMobile && !isLast ? `1px solid ${dividerColor}` : 'none',
+    }}>
+      {col.tag && (
+        <span style={{
+          fontFamily:    'var(--font-mono)',
+          fontSize:      'var(--text-xs)',
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+          color:         'var(--color-muted)',
+          opacity:       0.6,
+        }}>
+          {col.tag}
+        </span>
+      )}
+      {col.heading && (
+        <h3 style={{
+          ...headingStyle,
+          background:           h3Gradient,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor:  'transparent',
+          backgroundClip:       'text',
+          margin:               0,
+        }}>
+          {col.heading}
+        </h3>
+      )}
+      {hasIcon && (
+        <div style={{
+          width:          '100%',
+          display:        'flex',
+          justifyContent: 'center',
+          padding:        'var(--space-4) 0',
+        }}>
+          <MdiIcon path={MDI_ICONS[col.icon]} size={1.6} color="var(--color-muted)" />
+        </div>
+      )}
+      {col.body && <p style={{ ...paragraphStyle, margin: 0 }}>{renderParagraph(col.body)}</p>}
+    </div>
+  );
+}
 
 const styles = {
   page: {
-    maxWidth: '850px',
+    maxWidth: '1080px',
     margin:   '0 auto',
     padding:  'var(--space-10) var(--space-6) 0',
   },
   content: {
-    maxWidth:     '780px',
+    maxWidth:     '1000px',
     margin:       '0 auto var(--space-20)',
     padding:      'var(--space-10) 20px var(--space-10)',
     borderRadius: 'var(--radius-lg)',
@@ -199,6 +567,7 @@ const styles = {
     marginTop:     'var(--space-8)',
     marginLeft:    'calc(-1 * var(--space-10))',
     marginRight:   'calc(-1 * var(--space-10))',
+    padding:       '2rem',
   },
   featureRow: {
     display:    'flex',
@@ -292,6 +661,19 @@ export default function ProjectPage({ project, onBack }) {
   const h3Gradient = theme === 'dark'
     ? 'linear-gradient(135deg, #ddd6fe 0%, #a5f3fc 100%)'
     : 'linear-gradient(135deg, #4c1d95 0%, #0c4a6e 100%)';
+  // Renders a paragraph — either a plain string, or a { segments: [] } object
+  // where individual segments can carry { text, highlight: true }.
+  // Reusable: any case study entry can mark text for highlight by using segments.
+  const renderParagraph = (p) => {
+    if (typeof p === 'string') return p;
+    if (p?.segments) {
+      return p.segments.map((seg, i) =>
+        seg.highlight ? <Highlight key={i}>{seg.text}</Highlight> : seg.text
+      );
+    }
+    return p;
+  };
+
   const sectionCount = project.sections?.length ?? 0;
   const bannerRef = useRef(null);
   const [showBack, setShowBack] = useState(false);
@@ -299,11 +681,21 @@ export default function ProjectPage({ project, onBack }) {
 
   const showPreview   = (src, type) => setPreview({ visible: true, src, type });
   const hidePreview   = ()          => setPreview(p => ({ ...p, visible: false }));
-  const togglePreview = (src, type) => setPreview(p =>
-    p.visible && p.src === src
-      ? { ...p, visible: false }
-      : { visible: true, src, type }
-  );
+
+  const holdTimerRef = useRef(null);
+  const holdFiredRef = useRef(false);
+
+  const onTouchStart = (src, type) => () => {
+    holdFiredRef.current = false;
+    holdTimerRef.current = setTimeout(() => {
+      holdFiredRef.current = true;
+      showPreview(src, type);
+    }, 3000);
+  };
+
+  const onTouchEnd = () => {
+    clearTimeout(holdTimerRef.current);
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -351,15 +743,28 @@ export default function ProjectPage({ project, onBack }) {
         <main>
         {project.sections?.map((section, i) => (
           <PageTransition key={i} delay={(i + 3) * 80}>
+          {section.type === 'expandableProcess' ? (
+            <ExpandableProcess
+              section={section}
+              sectionStyles={styles}
+              theme={theme}
+              isMobile={isMobile}
+              h2Gradient={h2Gradient}
+              h3Gradient={h3Gradient}
+              renderParagraph={renderParagraph}
+              onZoomStart={onTouchStart}
+              onZoomEnd={onTouchEnd}
+            />
+          ) : (
           <section style={styles.section}>
             {section.headerImage && (
               <Reveal delay={0}>
                 <div
                   className="img-zoom-wrap"
                   style={{ marginBottom: 'var(--space-5)', cursor: 'zoom-in' }}
-                  onMouseEnter={() => showPreview(section.headerImage, 'image')}
-                  onMouseLeave={hidePreview}
-                  onPointerDown={(e) => { if (e.pointerType !== 'mouse') togglePreview(section.headerImage, 'image') }}
+                  onPointerDown={onTouchStart(section.headerImage, 'image')}
+                  onPointerUp={onTouchEnd}
+                  onPointerCancel={onTouchEnd}
                 >
                   <img src={section.headerImage} alt={section.heading} />
                 </div>
@@ -369,7 +774,7 @@ export default function ProjectPage({ project, onBack }) {
             {section.paragraphs?.map((p, j) => (
               <React.Fragment key={j}>
                 <Reveal delay={j * 80}>
-                  <p style={styles.paragraph}>{p}</p>
+                  <p style={styles.paragraph}>{renderParagraph(p)}</p>
                 </Reveal>
                 {j === 0 && section.videoGrid && (
                   <Reveal delay={120}>
@@ -378,9 +783,9 @@ export default function ProjectPage({ project, onBack }) {
                         <div
                           key={k}
                           style={{ ...styles.videoCell, cursor: 'zoom-in' }}
-                          onMouseEnter={() => showPreview(src, 'video')}
-                          onMouseLeave={hidePreview}
-                          onPointerDown={(e) => { if (e.pointerType !== 'mouse') togglePreview(src, 'video') }}
+                          onPointerDown={onTouchStart(src, 'video')}
+                          onPointerUp={onTouchEnd}
+                          onPointerCancel={onTouchEnd}
                         >
                           <div style={styles.phoneScreen}>
                             <video
@@ -410,9 +815,9 @@ export default function ProjectPage({ project, onBack }) {
                 <div
                   className="img-zoom-wrap"
                   style={{ marginTop: 'var(--space-5)', marginBottom: 'var(--space-5)', cursor: 'zoom-in' }}
-                  onMouseEnter={() => showPreview(section.image, 'image')}
-                  onMouseLeave={hidePreview}
-                  onPointerDown={(e) => { if (e.pointerType !== 'mouse') togglePreview(section.image, 'image') }}
+                  onPointerDown={onTouchStart(section.image, 'image')}
+                  onPointerUp={onTouchEnd}
+                  onPointerCancel={onTouchEnd}
                 >
                   <img src={section.image} alt={section.heading} />
                 </div>
@@ -428,12 +833,19 @@ export default function ProjectPage({ project, onBack }) {
             ) : null}
             {section.columns && (
               <Reveal delay={80}>
-                <div style={{ display: 'flex', flexWrap: isMobile ? 'wrap' : 'nowrap', gap: 'var(--space-5)', marginTop: 'var(--space-5)' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', flexDirection: isMobile ? 'column' : 'row', marginTop: 'var(--space-5)' }}>
                   {section.columns.map((col, k) => (
-                    <div key={k} style={{ flex: isMobile ? '1 1 100%' : 1, display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                      {col.heading && <h3 style={{ ...styles.sectionHeading, background: h3Gradient, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{col.heading}</h3>}
-                      {col.body && <p style={styles.paragraph}>{col.body}</p>}
-                    </div>
+                    <GoalColumn
+                      key={k}
+                      col={col}
+                      headingStyle={styles.sectionHeading}
+                      paragraphStyle={styles.paragraph}
+                      h3Gradient={h3Gradient}
+                      theme={theme}
+                      renderParagraph={renderParagraph}
+                      isLast={k === section.columns.length - 1}
+                      isMobile={isMobile}
+                    />
                   ))}
                 </div>
               </Reveal>
@@ -470,9 +882,9 @@ export default function ProjectPage({ project, onBack }) {
                           background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
                           cursor: 'zoom-in',
                         }}
-                        onMouseEnter={() => { const s = card.video ?? card.image; if (s) showPreview(s, card.video ? 'video' : 'image') }}
-                        onMouseLeave={hidePreview}
-                        onPointerDown={(e) => { if (e.pointerType !== 'mouse') { const s = card.video ?? card.image; if (s) togglePreview(s, card.video ? 'video' : 'image') } }}
+                        onPointerDown={(() => { const s = card.video ?? card.image; return s ? onTouchStart(s, card.video ? 'video' : 'image') : undefined; })()}
+                        onPointerUp={onTouchEnd}
+                        onPointerCancel={onTouchEnd}
                       >
                         {card.frame && card.video ? (
                           <div style={styles.featurePhoneWrap}>
@@ -505,6 +917,7 @@ export default function ProjectPage({ project, onBack }) {
               <CTAButton href={section.cta.href} label={section.cta.label} />
             )}
           </section>
+          )}
           </PageTransition>
         ))}
         </main>
